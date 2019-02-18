@@ -18,7 +18,7 @@ if [[ ! -f ${SSH_AUTHORIZED_KEYS_PATH} ]]; then
     curl -Lf ${SSH_AUTHORIZED_KEYS_URL} > ${SSH_AUTHORIZED_KEYS_PATH}
 fi
 
-pacman -Sy openssh
+pacman -Sy openssh --noconfirm
 
 systemctl start sshd
 
