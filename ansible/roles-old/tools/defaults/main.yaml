@@ -1,0 +1,7 @@
+---
+
+tool_packages:
+  - mosh
+  - htop
+  - mc
+  - vim

@@ -1,0 +1,29 @@
+#---
+
+- name: install cockpit packages
+  command: "rpm-ostree install --idempotent {{ cockpit_packages | join(' ') }}"
+  register: res_install
+
+#- name: copy config file
+#  template:
+#    src: config.json
+#    dest: /var/lib/containers/atomic/ws.0/config.json
+#    owner: root
+#    group: root
+#    mode: 0644
+
+- name: reboot after cockpit installation if needed
+  reboot:
+  when: res_install is changed and res_install.stdout.find('systemctl reboot') != -1
+
+- name: enable cockpit
+  command: systemctl enable cockpit.socket
+
+- name: start cockpit
+  command: systemctl start cockpit.socket
+
+- name: open firewall port
+  command: "firewall-cmd --zone=public --add-port=9090/tcp --permanent"
+
+- name: reload firewall rules
+  command: "firewall-cmd --reload"

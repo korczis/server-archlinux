@@ -1,0 +1,16 @@
+---
+
+- name: install tuned packages
+  command: "rpm-ostree install --idempotent {{ tuned_packages | join(' ') }}"
+  register: res_install
+
+- name: reboot after tuned packages installation if needed
+  reboot:
+  when: res_install is changed and res_install.stdout.find('systemctl reboot') != -1
+
+- name: ensure tuned service is started and enabled
+  systemd:
+    daemon_reload: true
+    name: tuned
+    state: restarted
+    enabled: true

@@ -1,0 +1,9 @@
+---
+
+- name: install core packages
+  command: "rpm-ostree install --idempotent {{ core_packages | join(' ') }}"
+  register: res_install
+
+- name: reboot after core packages instalation if needed
+  reboot:
+  when: res_install is changed and res_install.stdout.find('systemctl reboot') != -1

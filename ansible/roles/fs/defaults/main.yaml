@@ -1,0 +1,7 @@
+---
+
+fs_devices:
+  - '/dev/sda'
+  - '/dev/sdb'
+  - '/dev/sdc'
+  - '/dev/sdd'

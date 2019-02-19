@@ -1,0 +1,11 @@
+---
+
+# See https://docs.ansible.com/ansible/latest/modules/pacman_module.html
+
+- name: Run the equivalent of "pacman -Sy" as a separate step
+  pacman:
+    update_cache: yes
+
+- name: Run the equivalent of "pacman -Su" as a separate step
+  pacman:
+    upgrade: yes

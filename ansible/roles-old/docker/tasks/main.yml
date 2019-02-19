@@ -1,0 +1,21 @@
+---
+
+- name: ensure group "docker" exists
+  group:
+    name: docker
+    state: present
+
+- name: chown /var/run/docker.sock
+  file:
+    path: /var/run/docker.sock
+    owner: root
+    group: docker
+
+- name: create data directory for docker
+  file:
+    path: /var/lib/data
+    state: directory
+    owner: root
+    group: docker
+    mode: 0775
+    recurse: yes
