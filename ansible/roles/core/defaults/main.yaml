@@ -1,0 +1,6 @@
+---
+
+core_packages:
+  - expac
+  - yajl
+  - sudo

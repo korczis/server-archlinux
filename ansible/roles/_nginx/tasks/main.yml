@@ -1,0 +1,13 @@
+---
+
+- name: install nginx
+  package:
+    name: nginx
+    state: present
+
+- name: ensure nginx service is started and enabled
+  systemd:
+    daemon_reload: true
+    name: nginx
+    state: restarted
+    enabled: true

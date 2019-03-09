@@ -8,18 +8,28 @@
       with_items:
         - "{{ fs_devices }}"
 
-- name: print disk info
-  block:
-    # Create a new primary partition with a size of 1GiB
-    - parted:
-        device: "{{ item }}"
-        number: "{{ idx + 1 }}"
-        state: present
-        part_start: 1MiB
-        part_end: 256MiB
-      loop: "{{ fs_devices }}"
-      loop_control:
-        index_var: idx
+#- name:  create a new partition with a size of 256MiB - /boot/efi
+#  block:
+#    - parted:
+#        device: "{{ item }}"
+#        number: "{{ idx + 1 }}"
+#        state: present
+#        part_end: 256MiB
+#      loop: "{{ fs_devices }}"
+#      loop_control
+#        index_var: idx
+#
+#- name:  create a new partition with a size of 256MiB - /boot
+#  block:
+#    - parted:
+#        device: "{{ item }}"
+#        number: "{{ idx + 2 }}"
+#        state: present
+#        part_start: 256MiB
+#        part_end: 256MiB
+#      loop: "{{ fs_devices }}"
+#      loop_control
+#      index_var: idx
 
 #- name: mdadm
 #  include_role:

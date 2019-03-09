@@ -1,0 +1,59 @@
+---
+
+- name: install core packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ core_packages }}"
+
+- name: git clone yay
+  become_user: archer
+  git:
+    repo: 'https://github.com/Jguer/yay.git'
+    dest: "/tmp/yay"
+    update: yes
+    version: v9.1.0
+
+- name: build yay
+  become_user: archer
+  command: makepkg -si
+  args:
+    chdir: /tmp/yay
+
+#- name: download cower
+#  get_url:
+#    url: https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower
+#    dest: "/tmp/PKGBUILD-cower"
+#
+#- name: ensure cower is installed
+#  makepkg:
+#    name: "/tmp/PKGBUILD-cower"
+#    state: present
+#-
+#- name: install cockpit packages
+#  command: "rpm-ostree install --idempotent {{ cockpit_packages | join(' ') }}"
+#  register: res_install
+#
+##- name: copy config file
+##  template:
+##    src: config.json
+##    dest: /var/lib/containers/atomic/ws.0/config.json
+##    owner: root
+##    group: root
+##    mode: 0644
+#
+#- name: reboot after cockpit installation if needed
+#  reboot:
+#  when: res_install is changed and res_install.stdout.find('systemctl reboot') != -1
+#
+#- name: enable cockpit
+#  command: systemctl enable cockpit.socket
+#
+#- name: start cockpit
+#  command: systemctl start cockpit.socket
+#
+#- name: open firewall port
+#  command: "firewall-cmd --zone=public --add-port=9090/tcp --permanent"
+#
+#- name: reload firewall rules
+#  command: "firewall-cmd --reload"

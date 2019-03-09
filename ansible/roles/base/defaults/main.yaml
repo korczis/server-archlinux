@@ -1,0 +1,9 @@
+---
+
+base_packages:
+  - git
+  - htop
+  - mc
+  - mosh
+  - tmux
+  - vim

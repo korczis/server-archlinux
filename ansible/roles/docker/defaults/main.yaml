@@ -1,0 +1,4 @@
+---
+
+docker_data_dir: "/var/lib/data"
+docker_sock_path: "/var/run/docker.sock"

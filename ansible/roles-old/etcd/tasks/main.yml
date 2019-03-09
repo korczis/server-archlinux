@@ -2,7 +2,7 @@
 
 - name: install etcd
   command: "atomic install --system --system-package=no --storage=ostree --name=etcd registry.fedoraproject.org/latest/etcd"
-  register: result
+   v
 
 - name: reload systemd daemon
   command: "systemctl daemon-reload"

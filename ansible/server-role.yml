@@ -4,7 +4,9 @@
   remote_user: root
   debugger: never # always | never | on_failed | on_unreachable | on_skipped
   roles:
-    - fs
-    # - users
-    # - role: ansible-mdadm
-    # - ansible-mdadm
+    - os                # Upgrade system
+    - core              # Core system packages
+#    - base              # Base tools - tmux, mosh, ...
+#    - docker
+#    - docker-registry
+#    - users

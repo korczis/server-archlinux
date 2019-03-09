@@ -1,0 +1,29 @@
+---
+
+- name: ensure group "docker" exists
+  group:
+    name: docker
+    state: present
+
+- name: install docker
+  package:
+    name: docker
+    state: present
+
+- name: ensure docker service is started and enabled
+  service: name=docker state=restarted enabled=true
+
+- name: "chown {{ docker_sock_path }}"
+  file:
+    path: "{{ docker_sock_path }}"
+    owner: root
+    group: docker
+
+- name: create data directory for docker
+  file:
+    path: "{{ docker_data_dir }}"
+    state: directory
+    owner: root
+    group: docker
+    mode: 0775
+    recurse: yes
