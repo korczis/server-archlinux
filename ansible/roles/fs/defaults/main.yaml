@@ -1,5 +1,10 @@
 ---
 
+fs_arrays:
+  - '/dev/md1'
+  - '/dev/md2'
+  - '/dev/md3'
+
 fs_devices:
   - '/dev/sda'
   - '/dev/sdb'
