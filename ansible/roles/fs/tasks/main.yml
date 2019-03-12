@@ -132,17 +132,17 @@
 
 # ---
 
-#- block:
-#  - name:  'create a new partition using remaining space - /'
-#    parted:
-#      device: "{{ item.dev }}"
-#      number: "{{ idx + 3 }}"
-#      state: present
-#      part_start: 768MiB
-#      part_end: 100%
-#    loop: "{{ fs_layout.devices }}"
-#    loop_control:
-#      index_var: idx
+- block:
+  - name:  'create a new partition using remaining space - /'
+    parted:
+      device: "{{ item.dev }}"
+      number: "{{ idx + 3 }}"
+      state: present
+      part_start: 768MiB
+      part_end: 100%
+    loop: "{{ fs_layout.devices }}"
+    loop_control:
+      index_var: idx
 
 ## ---
 #
@@ -169,9 +169,8 @@
           - '/dev/sdd1'
         filesystem: 'ext4'
         level: '1'
-        mountpoint: '/mnt/md1'
+        # mountpoint: '/mnt/md1'
         state: 'present'
-  ignore_errors: true
 
 - name: create /boot md array
   include_role:
@@ -189,22 +188,22 @@
         # mountpoint: '/mnt/md2'
         state: 'present'
 
-#- name: create / md array
-#  include_role:
-#    name: ansible-mdadm
-#  vars:
-#    mdadm_arrays:
-#      - name: 'md3'
-#        devices:
-#          - '/dev/sda3'
-#          - '/dev/sdb3'
-#          - '/dev/sdc3'
-#          - '/dev/sdd3'
-#        filesystem: 'ext4'
-#        filesystem_opts: ''
-#        level: '10'
-#        # mountpoint: '/mnt/md3'
-#        state: 'present'
+- name: create / md array
+  include_role:
+    name: ansible-mdadm
+  vars:
+    mdadm_arrays:
+      - name: 'md3'
+        devices:
+          - '/dev/sda3'
+          - '/dev/sdb3'
+          - '/dev/sdc3'
+          - '/dev/sdd3'
+        filesystem: 'ext4'
+        filesystem_opts: ''
+        level: '10'
+        # mountpoint: '/mnt/md3'
+        state: 'present'
 
 # -------------------- # OLD
 
