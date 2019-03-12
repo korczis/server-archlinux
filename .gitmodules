@@ -1,6 +1,6 @@
 [submodule "ansible/external/mdadm"]
 	path = ansible/external/ansible-mdadm
-	url = https://github.com/mrlesmithjr/ansible-mdadm.git
+	url = https://github.com/korczis/ansible-mdadm.git
 [submodule "ansible/modules/aur"]
 	path = ansible/modules/aur
 	url = https://github.com/kewlfft/ansible-aur.git
