@@ -3,5 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ansible/external/ansible-mdadm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ansible/modules/aur" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ansible/modules/makepkg" vcs="Git" />
   </component>
 </project>

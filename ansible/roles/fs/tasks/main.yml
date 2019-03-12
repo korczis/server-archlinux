@@ -15,11 +15,21 @@
 
 # ---
 
-- name: remove parititons
-  include: "./remove-partitions.yml fs_device={{device}}"
-  with_items: "{{ fs_devices }}"
-  loop_control:
-    loop_var: device
+- name: unmount a mounted md volumes
+  mount:
+    path: "{{ item }}"
+    state: unmounted
+  with_items:
+    - /mnt/md1
+    - /mnt/md2
+    - /mnt/md3
+
+# ---
+
+#- name: probe partititons
+#  command: partprobe
+
+# ---
 
 - name: remove arrays
   include: "./remove-arrays.yml fs_array={{array}}"
@@ -27,7 +37,13 @@
   loop_control:
     loop_var: array
 
-- name: remove /boot/efi md array
+#- name: remove parititons
+#  include: "./remove-partitions.yml fs_device={{device}}"
+#  with_items: "{{ fs_devices }}"
+#  loop_control:
+#    loop_var: device
+
+- name: remove /boot md array
   include_role:
     name: ansible-mdadm
   vars:
@@ -40,12 +56,12 @@
           - '/dev/sdd1'
         filesystem: 'vfat'
         level: '1'
-        # mountpoint: '/mnt/boot/efi'
+        mountpoint: '/mnt/md1'
         state: 'absent'
     args:
       removes: "/dev/md1"
 
-- name: remove /boot md array
+- name: remove /boot/efi md array
   include_role:
     name: ansible-mdadm
   vars:
@@ -58,7 +74,7 @@
           - '/dev/sdd2'
         filesystem: 'ext4'
         level: '1'
-        # mountpoint: '/mnt/boot'
+        mountpoint: '/mnt/md2'
         state: 'absent'
     args:
       removes: "/dev/md2"
@@ -76,7 +92,7 @@
           - '/dev/sdd3'
         filesystem: 'ext4'
         level: '10'
-        # mountpoint: '/mnt'
+        mountpoint: '/mnt/md3'
         state: 'absent'
     args:
       removes: "/dev/md3"
@@ -89,40 +105,46 @@
 #  loop_control:
 #    loop_var: device
 
-# ----
+#- name: probe partititons
+#  command: partprobe
 
-- name:  create a new partition with a size of 256MiB - /boot/efi
-  parted:
-    device: "{{ item }}"
-    number: "{{ idx + 1 }}"
-    state: present
-    part_end: 256MiB
-  loop: "{{ fs_devices }}"
-  loop_control:
-    index_var: idx
+# ----
 
 - name:  create a new partition with a size of 512MiB - /boot
   parted:
     device: "{{ item }}"
-    number: "{{ idx + 2 }}"
+    number: "{{ idx + 1 }}"
     state: present
-    part_start: 256MiB
-    part_end: "{{256 + 512}}MiB"
+    part_start: 1MiB
+    part_end: 512MiB
+    align: minimal
   loop: "{{ fs_devices }}"
   loop_control:
     index_var: idx
 
-- name:  create a new partition with ...
+- name:  create a new partition with a size of 256MiB - /boot/efi
+  parted:
+    device: "{{ item }}"
+    number: "{{ idx + 2 }}"
+    state: present
+    part_start: 512MiB
+    part_end: 768MiB
+    align: minimal
+  loop: "{{ fs_devices }}"
+  loop_control:
+    index_var: idx
+
+- name:  create a new partition using remaining space - /
   parted:
     device: "{{ item }}"
     number: "{{ idx + 3 }}"
     state: present
-    part_start: "{{256 + 512}}MiB"
+    part_start: 768MiB
     part_end: 100%
+    align: minimal
   loop: "{{ fs_devices }}"
   loop_control:
     index_var: idx
-
 
 # ----
 
@@ -140,10 +162,10 @@
         filesystem: 'ext4'
         filesystem_opts: ''
         level: '10'
-        mountpoint: '/mnt'
+        mountpoint: '/mnt/md3'
         state: 'present'
 
-- name: create /boot md array
+- name: create /boot/efi md array
   include_role:
     name: ansible-mdadm
   vars:
@@ -156,10 +178,10 @@
           - '/dev/sdd2'
         filesystem: 'ext4'
         level: '1'
-        mountpoint: '/mnt/boot'
+        mountpoint: '/mnt/md2'
         state: 'present'
 
-- name: create /boot/efi md array
+- name: create /boot md array
   include_role:
     name: ansible-mdadm
   vars:
@@ -172,7 +194,7 @@
           - '/dev/sdd1'
         filesystem: 'vfat'
         level: '1'
-        mountpoint: '/mnt/boot/efi'
+        mountpoint: '/mnt/md1'
         state: 'present'
 
 # --------------------
