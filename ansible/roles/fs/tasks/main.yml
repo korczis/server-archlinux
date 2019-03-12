@@ -49,6 +49,20 @@
 
 # ---
 
+- name: remove a logical volume for root - remaining space
+  lvol:
+    vg: vg.main
+    lv: root
+    force: yes
+    state: absent
+
+- name: remove a volume group on top of /dev/md3
+  lvg:
+    vg: vg.main
+    pvs: /dev/md3
+    force: yes
+    state: absent
+
 - block:
   - name: 'unmount md devices'
     mount:
@@ -171,6 +185,7 @@
         level: '1'
         # mountpoint: '/mnt/md1'
         state: 'present'
+        force: true
 
 - name: create /boot md array
   include_role:
@@ -187,6 +202,7 @@
         level: '1'
         # mountpoint: '/mnt/md2'
         state: 'present'
+        force: true
 
 - name: create / md array
   include_role:
@@ -204,88 +220,38 @@
         level: '10'
         # mountpoint: '/mnt/md3'
         state: 'present'
+        force: true
+
+- name: create a volume group on top of /dev/md3
+  lvg:
+    vg: vg.main
+    pvs: /dev/md3
+    pesize: 1536G
+    force: yes
+    state: present
+
+- name: create a logical volume for root - remaining space
+  lvol:
+    vg: vg.main
+    lv: root
+    size: '+100%FREE'
+    force: yes
+    state: present
+
+- name: format /dev/vg.main/root
+  filesystem:
+    fstype: ext4
+    force: yes
+    dev: /dev/vg.main/root
 
 # -------------------- # OLD
 
-##- name:
-##    - mdadm_arrays:
-##      - name: 'md0'
-##        # Define disk devices to assign to array
-##        devices: "{{ fs_devices }}"
-##        filesystem: 'ext4'
-##        state: 'present'
-##- name: mdadm
-##  include_role:
-##    name: ansible-mdadm
-##  vars:
-##    - mdadm_arrays:
-##      - name: 'md0'
-##        # Define disk devices to assign to array
-##        devices: "{{ fs_devices }}"
-##        filesystem: 'ext4'
-##        state: 'present'
-#
-##- name: mdadm
-##  mdadm_arrays:
-##    # Define array name
-##    - name: 'md0'
-##      # Define disk devices to assign to array
-##      devices:
-##        - '/dev/sdb'
-##        - '/dev/sdc'
-##      # Define filesystem to partition array with
-##      filesystem: 'ext4'
-##      filesystem_opts: ''
-##      # Define the array raid level
-##      # 0|1|4|5|6|10
-##      level: '1'
-##      # Define mountpoint for array device
-##      mountpoint: '/mnt/md0'
-##      # Define if array should be present or absent
-##      state: 'present'
-##      # Set mount options (optional)
-##      opts: 'noatime'
-##    # - name: 'md0'
-##    #   devices:
-##    #     - '/dev/sdb'
-##    #     - '/dev/sdc'
-##    #     - '/dev/sdd'
-##    #   filesystem: 'ext4'
-##    #   level: '5'
-##    #   mountpoint: '/mnt/md0'
-##    #   state: 'present'
-##    -
-## Read device information (always use unit when probing)
-##- parted: device=/dev/sdb unit=MiB
-##  register: sdb_info
-#
-##- name: print disk info
-##  block:
-##    - command: "fdisk -l {{ item }}"
-##      with_items:
-##        - "{{ fs_devices }}"
-##
-##- name: create partition
-##  parted:
-##    device: /dev/sda
-##    number: 1
-##    state: present
-##    part_end: 1GiB
-#
-### Read device information (always use unit when probing)
-##- parted: device=/dev/sda unit=MiB
-##  register: sda_info
-##
-### Remove all partitions from disk
-##- parted:
-##    device: /dev/sda
-##    number: "{{ item.num }}"
-##    state: absent
-##  with_items:
-##    - "{{ sda_info.partitions }}"
-#
-### Create a new primary partition
-##- parted:
-##    device: /dev/sda
-##    number: 1
-##    state: present
+# Read device information (always use unit when probing)
+#- parted: device=/dev/sdb unit=MiB
+#  register: sdb_info
+
+#- name: print disk info
+#  block:
+#    - command: "fdisk -l {{ item }}"
+#      with_items:
+#        - "{{ fs_devices }}"
