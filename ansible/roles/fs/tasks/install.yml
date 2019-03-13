@@ -1,0 +1,20 @@
+# ---
+
+- name: 'install the base system'
+  command: 'pacstrap /mnt base base-devel linux-tools devel git htop mc mosh tmux vim grub os-prober efibootmgr'
+
+- name: copy /etc/mkinitcpio.conf
+  template:
+    src: mnt/etc/mkinitcpio.conf
+    dest: /mnt/etc/mkinitcpio.conf
+
+# Bullet installer - https://github.com/vvo/ansible-archee/blob/master/install-arch.md
+# RAID + LVM + EFI - https://bbs.archlinux.org/viewtopic.php?pid=1390741#p1390741
+# chroot - https://www.reddit.com/r/ansible/comments/8kc59a/how_to_use_the_chroot_connection_plugin/
+# Arch GRUB - https://wiki.archlinux.org/index.php/GRUB
+
+- name: 'generate /mnt/etc/mdadm.conf'
+  shell: 'mdadm --detail --scan >> /mnt/etc/mdadm.conf'
+
+- name: 'generate /mnt/etc/fstab'
+  shell: 'genfstab -U -p /mnt >> /mnt/etc/fstab'

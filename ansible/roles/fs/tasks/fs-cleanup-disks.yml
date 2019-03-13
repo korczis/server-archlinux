@@ -1,0 +1,7 @@
+# ---
+
+- name: remove parititons
+  include: "./remove-partitions.yml fs_device={{device.dev}}"
+  with_items: "{{ fs_layout.devices }}"
+  loop_control:
+    loop_var: device

@@ -1,0 +1,85 @@
+# ---
+
+- name: copy /etc/mdadm.conf
+  template:
+    src: etc/mdadm.conf
+    dest: /etc/mdadm.conf
+    owner: root
+    group: root
+    mode: 0644
+
+# ---
+
+#- name: 'unmount /mnt recursively'
+#  mount:
+#    path: '/mnt'
+#    state: unmounted
+
+- name: 'unmount /mnt/hostlvm'
+  mount:
+    path: '/mnt/hostlvm'
+    state: unmounted
+
+- name: 'unmount /mnt/boot/efi'
+  mount:
+    path: '/mnt/boot/efi'
+    state: unmounted
+
+- name: 'unmount /mnt/efi'
+  mount:
+    path: '/mnt/efi'
+    state: unmounted
+
+- name: 'unmount /mnt/boot'
+  mount:
+    path: '/mnt/boot'
+    state: unmounted
+
+- name: 'unmount /mnt'
+  mount:
+    path: '/mnt'
+    state: unmounted
+
+# ---
+
+# Cleanup LVM partitions
+- name: 'cleanup LVM'
+  include: "./fs-cleanup-lvm.yml"
+
+# Cleanup MD partitions
+- name: 'cleanup MD'
+  include: "./fs-cleanup-md.yml"
+
+# Cleanup physical disks/partitions
+- name: 'cleanup disks'
+  include: "./fs-cleanup-disks.yml"
+
+# ---
+
+# Init physical disks
+- name: 'init disks'
+  include: "./fs-init-disks.yml"
+
+# Init physical partitions
+- name: 'init disks'
+  include: "./fs-init-partitions.yml"
+
+# Init MD partitions
+- name: 'init MD'
+  include: "./fs-init-md.yml"
+
+# Init LVM partitions
+- name: 'init LVM'
+  include: "./fs-init-lvm.yml"
+
+# ---
+
+# Mount what is needed
+- name: 'mount what is needed'
+  include: "./fs-init-mounts.yml"
+
+# ---
+
+# Dump partitions
+- name: 'dump partitions'
+  include: "./fs-dump.yml"

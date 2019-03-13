@@ -1,0 +1,42 @@
+# ---
+
+- name: "remove a logical volume 'swap' - manual way"
+  command: 'lvremove -f /dev/vg.main/swap'
+  args:
+    removes: '/dev/vg.main/swap'
+
+- name: "remove a logical volume 'swap' - ansible way"
+  lvol:
+    vg: vg.main
+    lv: swap
+    force: yes
+    state: absent
+
+# ---
+
+- name: "remove a logical volume 'root' - manual way"
+  command: 'lvremove -f /dev/vg.main/root'
+  args:
+    removes: '/dev/vg.main/root'
+
+- name: "remove a logical volume 'root' - ansible way"
+  lvol:
+    vg: vg.main
+    lv: root
+    force: yes
+    state: absent
+
+# ---
+
+- name: "remove volume group '/dev/md3' - manual way"
+  command: 'pvremove -ffy /dev/md3'
+  args:
+    removes: '/dev/md3'
+
+- name: "remove volume group '/dev/md3' - ansible way"
+  lvg:
+    vg: vg.main
+    pvs: /dev/md3
+    force: yes
+    pv_options: '-ff'
+    state: absent

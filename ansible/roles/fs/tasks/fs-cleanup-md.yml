@@ -1,0 +1,21 @@
+# ---
+
+- block:
+  - name: 'unmount md devices'
+    mount:
+      path: "{{ item.dev }}"
+      opts: '-l'
+      state: unmounted
+    with_items:
+      - "{{ fs_layout.arrays }}"
+
+- name: 'remove arrays'
+  command: "mdadm --remove {{ array.dev }}"
+  with_items: "{{ fs_layout.arrays }}"
+  loop_control:
+    loop_var: array
+  args:
+    removes: "{{ array.dev }}"
+
+- name: 'stop md devices using --scan'
+  command: 'mdadm --stop --scan'

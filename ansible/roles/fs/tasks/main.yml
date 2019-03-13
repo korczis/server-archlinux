@@ -1,257 +1,32 @@
-## https://docs.ansible.com/ansible/latest/modules/parted_module.html
+# ---
+
+# Adhoc helper (testing only)
+#- name: 'adhoc commands'
+#  include: "./adhoc.yml"
 
 # ---
 
-- name: print disk info
-  command: "fdisk -l {{ device.dev }}"
-  with_items: "{{ fs_layout.devices }}"
-  loop_control:
-    loop_var: device
-
-# ---
-
-- name: install fs packages
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ fs_packages }}"
-
-# ---
-
-- name: copy /etc/mdadm.conf
-  template:
-    src: etc/mdadm.conf
-    dest: /etc/mdadm.conf
-    owner: root
-    group: root
-    mode: 0644
-
-# ---
-
-#- name: limit raid rebuild speed
-#  block:
-#    - command: "sysctl -w dev.raid.speed_limit_min=10000"
-#    - command: "sysctl -w dev.raid.speed_limit_max=10000"
-
-# ---
-
-#- name: remove arrays
-#  include: "./remove-arrays.yml fs_array={{array.dev}}"
-#  with_items: "{{ fs_layout.arrays }}"
-#  loop_control:
-#    loop_var: array
-#
-#- name: remove parititons
-#  include: "./remove-partitions.yml fs_device={{device.dev}}"
+#- name: 'print disk info'
+#  command: "fdisk -l {{ device.dev }}"
 #  with_items: "{{ fs_layout.devices }}"
 #  loop_control:
 #    loop_var: device
 
 # ---
 
-- name: remove a logical volume for root - remaining space
-  lvol:
-    vg: vg.main
-    lv: root
-    force: yes
-    state: absent
+# Install required packages
+- name: 'install prerequisites'
+  include: "./install-prerequisites.yml"
 
-- name: remove a volume group on top of /dev/md3
-  lvg:
-    vg: vg.main
-    pvs: /dev/md3
-    force: yes
-    state: absent
+# Load required kernel modules
+- name: 'bootstrap'
+  include: "./bootstrap.yml"
 
-- block:
-  - name: 'unmount md devices'
-    mount:
-      path: "{{ item.dev }}"
-      opts: '-l'
-      state: unmounted
-    with_items:
-      - "{{ fs_layout.arrays }}"
+# Initialize filesystem
+- name: 'initialize filesystem'
+  include: "./fs.yml"
 
-- name: remove arrays
-  command: "mdadm --remove {{ array.dev }}"
-  with_items: "{{ fs_layout.arrays }}"
-  loop_control:
-    loop_var: array
-  args:
-    removes: "{{ array.dev }}"
+# Install system
+- name: 'install system'
+  include: "./install.yml"
 
-- name: 'stop md devices using --scan'
-  command: 'mdadm --stop --scan'
-
-- name: remove parititons
-  include: "./remove-partitions.yml fs_device={{device.dev}}"
-  with_items: "{{ fs_layout.devices }}"
-  loop_control:
-    loop_var: device
-
-- name: 'partprobe update parititons'
-  command: "partprobe {{device.dev}}"
-  with_items: "{{ fs_layout.devices }}"
-  loop_control:
-    loop_var: device
-  ignore_errors: true
-
-# ---
-
-- block:
-  - name: 'create a new partition with a size of 256MiB - /boot/efi'
-    parted:
-      device: "{{ item.dev }}"
-      number: "{{ idx + 1 }}"
-      state: present
-      part_start: 1MiB
-      part_end: 256MiB
-    loop: "{{ fs_layout.devices }}"
-    loop_control:
-      index_var: idx
-
-- block:
-  - name: 'create /boot/efi filesystem'
-    filesystem:
-      fstype: ext4
-      force: yes
-      dev:  "{{ item.dev }}1"
-    loop: "{{ fs_layout.devices }}"
-    loop_control:
-      index_var: idx
-
-# ---
-
-- block:
-  - name: 'create a new partition with a size of 512MiB - /boot'
-    parted:
-      device: "{{ item.dev }}"
-      number: "{{ idx + 2 }}"
-      state: present
-      part_start: 256MiB
-      part_end: 768MiB
-    loop: "{{ fs_layout.devices }}"
-    loop_control:
-      index_var: idx
-
-- block:
-  - name: 'create /boot filesystem'
-    filesystem:
-      fstype: vfat
-      force: yes
-      dev:  "{{ item.dev }}2"
-    loop: "{{ fs_layout.devices }}"
-    loop_control:
-      index_var: idx
-
-# ---
-
-- block:
-  - name:  'create a new partition using remaining space - /'
-    parted:
-      device: "{{ item.dev }}"
-      number: "{{ idx + 3 }}"
-      state: present
-      part_start: 768MiB
-      part_end: 100%
-    loop: "{{ fs_layout.devices }}"
-    loop_control:
-      index_var: idx
-
-## ---
-#
-##- name: set gpt flag
-##  parted:
-##    device: "{{ item.dev }}"
-##    number: 1
-##    state: present
-##  with_items:
-##    - "{{ fs_layout.devices }}"
-#
-## ---
-
-- name: create /boot/efi md array
-  include_role:
-    name: ansible-mdadm
-  vars:
-    mdadm_arrays:
-      - name: 'md1'
-        devices:
-          - '/dev/sda1'
-          - '/dev/sdb1'
-          - '/dev/sdc1'
-          - '/dev/sdd1'
-        filesystem: 'ext4'
-        level: '1'
-        # mountpoint: '/mnt/md1'
-        state: 'present'
-        force: true
-
-- name: create /boot md array
-  include_role:
-    name: ansible-mdadm
-  vars:
-    mdadm_arrays:
-      - name: 'md2'
-        devices:
-          - '/dev/sda2'
-          - '/dev/sdb2'
-          - '/dev/sdc2'
-          - '/dev/sdd2'
-        filesystem: 'vfat'
-        level: '1'
-        # mountpoint: '/mnt/md2'
-        state: 'present'
-        force: true
-
-- name: create / md array
-  include_role:
-    name: ansible-mdadm
-  vars:
-    mdadm_arrays:
-      - name: 'md3'
-        devices:
-          - '/dev/sda3'
-          - '/dev/sdb3'
-          - '/dev/sdc3'
-          - '/dev/sdd3'
-        filesystem: 'ext4'
-        filesystem_opts: ''
-        level: '10'
-        # mountpoint: '/mnt/md3'
-        state: 'present'
-        force: true
-
-- name: create a volume group on top of /dev/md3
-  lvg:
-    vg: vg.main
-    pvs: /dev/md3
-    pesize: 1536G
-    force: yes
-    state: present
-
-- name: create a logical volume for root - remaining space
-  lvol:
-    vg: vg.main
-    lv: root
-    size: '+100%FREE'
-    force: yes
-    state: present
-
-- name: format /dev/vg.main/root
-  filesystem:
-    fstype: ext4
-    force: yes
-    dev: /dev/vg.main/root
-
-# -------------------- # OLD
-
-# Read device information (always use unit when probing)
-#- parted: device=/dev/sdb unit=MiB
-#  register: sdb_info
-
-#- name: print disk info
-#  block:
-#    - command: "fdisk -l {{ item }}"
-#      with_items:
-#        - "{{ fs_devices }}"

@@ -2,7 +2,14 @@
 
 fs_packages:
   - mkinitcpio
+  - dosfstools
+  - efibootmgr
+  - refind-efi
 
+fs_kernel_modules:
+  - raid0
+  - raid1
+  - raid10
 
 fs_layout:
 
@@ -10,12 +17,16 @@ fs_layout:
   devices:
     - dev: /dev/sda
       label: gpt
+      name: sda
     - dev: /dev/sdb
       label: gpt
+      name: sdb
     - dev: /dev/sdc
       label: gpt
+      name: sdc
     - dev: /dev/sdd
       label: gpt
+      name: sdd
 
   # Arrays declarations
   arrays:

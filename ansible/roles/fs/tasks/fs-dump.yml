@@ -1,0 +1,15 @@
+# ---
+
+- name: 'create /etc/partitions directory'
+  file:
+    path: /etc/partitions
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: 'dump sfdisk settings'
+  shell: "sfdisk --dump {{ device.dev }} > /etc/partitions/{{ device.name }}.partitions"
+  with_items: "{{ fs_layout.devices }}"
+  loop_control:
+    loop_var: device

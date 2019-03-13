@@ -1,0 +1,103 @@
+# ---
+
+- block:
+  - name: 'create a new partition with a size of 512MiB - /boot/efi'
+    parted:
+      device: "{{ item.dev }}"
+      number: "{{ idx + 1 }}"
+      state: present
+      part_start: 1MiB
+      part_end: 512MiB
+      label: gpt
+      name: "{{ item.name }}-efi"
+    loop: "{{ fs_layout.devices }}"
+    loop_control:
+      index_var: idx
+
+- block:
+  - name: 'create /boot/efi filesystem'
+    filesystem:
+      fstype: vfat
+      force: yes
+      dev:  "{{ item.dev }}1"
+      opts: "-F32 -n {{ item.name }}-efi"
+    loop: "{{ fs_layout.devices }}"
+    loop_control:
+      index_var: idx
+
+- block:
+  - name: 'set bootable flag for /boot partitions'
+    shell: "parted -s {{ item.dev }} set 1 boot on"
+    loop: "{{ fs_layout.devices }}"
+    loop_control:
+      index_var: idx
+
+- block:
+  - name: 'set esp flag for /boot partitions'
+    shell: "parted -s {{ item.dev }} set 1 esp on"
+    loop: "{{ fs_layout.devices }}"
+    loop_control:
+      index_var: idx
+
+#- block:
+#  - name: 'format /boot partitions as FAT32'
+#    shell: " mkfs.fat -F32 {{ item.dev }}1"
+#    loop: "{{ fs_layout.devices }}"
+#    loop_control:
+#      index_var: idx
+
+
+# ---
+
+- block:
+  - name: 'create a new partition with a size of 512MiB - /boot'
+    parted:
+      device: "{{ item.dev }}"
+      number: "{{ idx + 2 }}"
+      state: present
+      part_start: 512MiB
+      part_end: 1024MiB
+      label: gpt
+      name: "{{ item.name }}-boot"
+    loop: "{{ fs_layout.devices }}"
+    loop_control:
+      index_var: idx
+
+- block:
+  - name: 'create /boot filesystem'
+    filesystem:
+      fstype: ext4
+      force: yes
+      dev:  "{{ item.dev }}2"
+      opts: " -L {{ item.name }}-boot"
+    loop: "{{ fs_layout.devices }}"
+    loop_control:
+      index_var: idx
+
+# ---
+
+- block:
+  - name:  'create a new partition using remaining space - /'
+    parted:
+      device: "{{ item.dev }}"
+      number: "{{ idx + 3 }}"
+      flags: [ lvm ]
+      state: present
+      part_start: 1024MiB
+      part_end: 100%
+      label: gpt
+      name: "{{ item.name }}-root"
+    loop: "{{ fs_layout.devices }}"
+    loop_control:
+      index_var: idx
+
+- block:
+  - name: 'create / filesystem'
+    filesystem:
+      fstype: ext4
+      force: yes
+      dev:  "{{ item.dev }}3"
+      opts: " -L {{ item.name }}-root"
+    loop: "{{ fs_layout.devices }}"
+    loop_control:
+      index_var: idx

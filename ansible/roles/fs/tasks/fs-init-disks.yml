@@ -1,0 +1,15 @@
+# ---
+
+- block:
+  - name: 'set gpt label'
+    shell: "parted -s {{ item.dev }} mklabel gpt"
+    loop: "{{ fs_layout.devices }}"
+    loop_control:
+      index_var: idx
+
+- name: 'partprobe update parititons'
+  command: "partprobe {{device.dev}}"
+  with_items: "{{ fs_layout.devices }}"
+  loop_control:
+    loop_var: device
+  ignore_errors: true

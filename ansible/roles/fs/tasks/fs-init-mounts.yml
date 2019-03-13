@@ -1,0 +1,65 @@
+# ---
+
+- name: 'create /mnt/boot mountpoint'
+  file:
+    path: '/mnt/boot'
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: 'mount /dev/md2 as /mnt/boot'
+  mount:
+    path: '/mnt/boot'
+    src: '/dev/md2'
+    fstype: ext4
+    state: mounted
+
+# ---
+
+- name: 'create /mnt/boot/efi mountpoint'
+  file:
+    path: '/mnt/boot/efi'
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: 'mount /dev/md1 as /mnt/boot/efi'
+  mount:
+    path: /mnt/boot/efi
+    src: /dev/md1
+    fstype: vfat
+    state: mounted
+
+# ---
+
+- name: 'create /mnt/efi mountpoint'
+  file:
+    path: '/mnt/efi'
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: 'mount /dev/md1 as /mnt/efi'
+  mount:
+    path: /mnt/efi
+    src: /dev/md1
+    fstype: vfat
+    state: mounted
+
+# ---
+
+#- name: 'create /mnt/hostlvm mountpoint'
+#  file:
+#    path: '/mnt/hostlvm'
+#    state: directory
+
+# $ mkdir /mnt/hostlvm
+# $ mount --bind /run/lvm /mnt/hostlvm
+# $ arch-chroot /mnt
+# $ ln -s /hostlvm /run/lvm
+
+#- name:  'mount /run/lvm as /mnt/hostlvm'
+#  command: ' mount --bind /run/lvm /mnt/hostlvm'

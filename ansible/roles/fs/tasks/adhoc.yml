@@ -1,0 +1,11 @@
+# ---
+
+# Cleanup LVM partitions
+- name: 'cleanup LVM'
+  include: "./fs-cleanup-lvm.yml"
+
+# ---
+
+# Init LVM partitions
+- name: 'init LVM'
+  include: "./fs-init-lvm.yml"

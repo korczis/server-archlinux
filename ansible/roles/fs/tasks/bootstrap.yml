@@ -1,0 +1,7 @@
+# ---
+
+- name: load kernel modules
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ fs_kernel_modules }}"
