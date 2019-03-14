@@ -1,0 +1,48 @@
+# ---
+
+- name: 'install cockpit prerequisites'
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ cockpit_packages }}"
+  tags:
+    - cockpit
+
+# ---
+
+- name: 'import required gpg keys'
+  become_user: ansible
+  shell: 'gpg --recv-keys --yes 7E83610126DCC2E8'
+  tags:
+    - cockpit
+
+# ---
+
+- name: 'install "systemtap-git" using pacaur'
+  become_user: ansible
+  aur:
+    use: pacaur
+    name: systemtap-git
+  tags:
+    - cockpit
+
+# ---
+
+- name: 'install "pcp" using pacaur'
+  become_user: ansible
+  aur:
+    use: pacaur
+    name: pcp
+  tags:
+    - cockpit
+
+
+# ---
+
+- name: 'install "cockpit-git" using pacaur'
+  become_user: ansible
+  aur:
+    use: pacaur
+    name: cockpit-git
+  tags:
+    - cockpit

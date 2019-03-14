@@ -1,0 +1,11 @@
+---
+
+cockpit_packages:
+  - texlive-core
+  - texlive-most
+  - texlive-lang
+  - texlive-langextra
+  - nss
+  - openssh
+  - openssl
+  - pam
