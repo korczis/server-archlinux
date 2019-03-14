@@ -24,6 +24,7 @@ galaxy_info:
   galaxy_tags: []
 
 dependencies:
+  - docker
   - pacaur
   - sudo
   - users

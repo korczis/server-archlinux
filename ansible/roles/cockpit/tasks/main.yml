@@ -18,7 +18,7 @@
 
 # ---
 
-- name: 'install "systemtap-git" using pacaur'
+- name: 'install "systemtap" using pacaur'
   become_user: ansible
   aur:
     use: pacaur
@@ -39,10 +39,88 @@
 
 # ---
 
-- name: 'install "cockpit-git" using pacaur'
+#- name: 'install "storaged" using pacaur'
+#  become_user: ansible
+#  aur:
+#    use: pacaur
+#    name: tpacu
+#  tags:
+#    - cockpit
+#
+#- name: 'ensure "storaged" service is up and running'
+#  service:
+#    name: storaged
+#    state: restarted
+#    enabled: true
+#  tags:
+#      - cockpit
+
+# ---
+
+- name: 'install "tuned" using pacaur'
   become_user: ansible
   aur:
     use: pacaur
-    name: cockpit-git
+    name: tuned-git
   tags:
     - cockpit
+
+- name: 'ensure "tuned" service is up and running'
+  service:
+    name: tuned
+    state: restarted
+    enabled: true
+  tags:
+      - cockpit
+
+# ---
+
+- name: 'ensure "NetworkManager" service is up and running'
+  service:
+    name: NetworkManager
+    state: restarted
+    enabled: true
+  tags:
+      - cockpit
+
+# ---
+
+- name: 'install "sos" using pacaur'
+  become_user: ansible
+  aur:
+    use: pacaur
+    name: sos
+  tags:
+    - cockpit
+
+# ---
+
+- name: 'install "cockpit" using pacaur'
+  become_user: ansible
+  aur:
+    use: pacaur
+    name: cockpit
+  tags:
+    - cockpit
+
+# ---
+
+# REFERENCES
+#
+# - https://aur.archlinux.org/packages/cockpit-minimal/
+# - https://aur.archlinux.org/packages/cockpit-git/
+
+- name: 'copy /etc/pam.d/sshd -> /etc/pam.d/cockpit'
+  command: 'cp /etc/pam.d/sshd /etc/pam.d/cockpit'
+  tags:
+    - cockpit
+
+# ---
+
+- name: 'ensure "cockpit" service is up and running'
+  service:
+    name: cockpit.socket
+    state: restarted
+    enabled: true
+  tags:
+      - cockpit

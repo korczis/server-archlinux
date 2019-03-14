@@ -1,11 +1,30 @@
 ---
 
 cockpit_packages:
+  - bluez
+  - cpupower
+  - dnsmasq
+  - docker
+  - dosfstools
+  - git
+  - gptfdisk
+  # - iwd # (optional) - wpa_supplicant alternative
+  - libvirt
+  - modemmanager
   - texlive-core
   - texlive-most
   - texlive-lang
   - texlive-langextra
+  - networkmanager
   - nss
+  - ntfs-3g
   - openssh
   - openssl
+  - packagekit
   - pam
+  - ppp
+  - python-pip
+  - python-linux-procfs
+  - python-pyudev
+  - udisks2
+
