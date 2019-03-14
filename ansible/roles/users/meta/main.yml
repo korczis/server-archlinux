@@ -23,4 +23,6 @@ galaxy_info:
 
   galaxy_tags: []
 
-dependencies: []
+dependencies:
+  - docker
+  - sudo

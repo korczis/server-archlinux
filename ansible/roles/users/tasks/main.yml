@@ -1,6 +1,13 @@
 ---
 
-- name: create users
+- name: 'create user "ansible"'
+  user:
+    name: ansible
+    state: present
+    groups:
+      - wheel
+
+- name: 'import github keys'
   user:
     name: "{{ item }}"
     groups:
@@ -11,7 +18,7 @@
     ssh_key_file: .ssh/id_rsa
   with_items: "{{ github_users }}"
 
-- name: set authorized keys taken from github
+- name: 'set authorized keys taken from github'
   authorized_key:
     user: "{{ item }}"
     state: present
