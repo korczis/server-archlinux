@@ -4,10 +4,11 @@
   remote_user: root
   debugger: never # always | never | on_failed | on_unreachable | on_skipped
   roles:
-    - fs
-#    - os                # Upgrade system
-#    - core              # Core system packages
-#    - base              # Base tools - tmux, mosh, ...
+    - os                # Upgrade system
+    - core              # Core system packages
+    - base              # Base tools - tmux, mosh, ...
+    - users
+    - pacaur
 #    - docker
 #    - docker-registry
-#    - users
+    - cockpit
