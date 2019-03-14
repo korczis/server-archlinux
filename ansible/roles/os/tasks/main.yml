@@ -2,12 +2,11 @@
 
 # See https://docs.ansible.com/ansible/latest/modules/pacman_module.html
 
-- name: full system upgrade
+- name: 'full system upgrade'
   pacman:
     update_cache: yes
     upgrade: yes
-
-- name: create archer user
-  user:
-    name: archer
-    group: wheel
+  tags:
+    - os
+    - os.upgrade
+    - os.upgrade.full
