@@ -7,4 +7,3 @@
     name: "{{ kubernetes_aur_packages }}"
   tags:
     - kubernetes
-
