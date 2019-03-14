@@ -1,0 +1,9 @@
+---
+
+desktop_packages:
+  - connman
+  - geoip-database
+  - sddm
+  - xorg
+  - xorg-server
+  - enlightenment
