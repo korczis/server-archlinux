@@ -1,4 +1,0 @@
----
-
-- name: print debug message
-  debug: msg="installing arch ..."
