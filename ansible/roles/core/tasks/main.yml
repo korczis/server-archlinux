@@ -1,1 +1,10 @@
 # ---
+
+- name: 'install core packages'
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ core_packages }}"
+  tags:
+    - core
+
