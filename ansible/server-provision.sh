@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
-echo "---| Server Provisioning |--"
+echo "+---------------------+"
+echo "| Server Provisioning |"
+echo "+---------------------+"
+echo
 
 ansible-playbook -v "$@" server-role.yml

@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
-echo "---| Host Provisioning |--"
+echo "+-------------------+"
+echo "| Host Provisioning |"
+echo "+-------------------+"
+echo
 
 ansible-playbook -v "$@" host-role.yml
