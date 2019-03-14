@@ -19,67 +19,116 @@
   mount:
     path: '/mnt/hostlvm'
     state: unmounted
+  tags:
+     - fs
+     - fs.unmount
 
 - name: 'unmount /mnt/boot/efi'
   mount:
     path: '/mnt/boot/efi'
     state: unmounted
+  tags:
+     - fs
+     - fs.unmount
 
 - name: 'unmount /mnt/efi'
   mount:
     path: '/mnt/efi'
     state: unmounted
+  tags:
+     - fs
+     - fs.unmount
 
 - name: 'unmount /mnt/boot'
   mount:
     path: '/mnt/boot'
     state: unmounted
+  tags:
+     - fs
+     - fs.unmount
 
 - name: 'unmount /mnt'
   mount:
     path: '/mnt'
     state: unmounted
+  tags:
+     - fs
+     - fs.unmount
 
 # ---
 
 # Cleanup LVM partitions
 - name: 'cleanup LVM'
   include: "./fs-cleanup-lvm.yml"
+  tags:
+     - fs
+     - fs.lvm
+     - fs.lvm.cleanup
 
 # Cleanup MD partitions
 - name: 'cleanup MD'
   include: "./fs-cleanup-md.yml"
+  tags:
+     - fs
+     - fs.md
+     - fs.md.cleanup
 
 # Cleanup physical disks/partitions
 - name: 'cleanup disks'
   include: "./fs-cleanup-disks.yml"
+  tags:
+     - fs
+     - fs.disks
+     - fs.disks.cleanup
 
 # ---
 
 # Init physical disks
 - name: 'init disks'
   include: "./fs-init-disks.yml"
+  tags:
+     - fs
+     - fs.disks
+     - fs.disks.init
 
 # Init physical partitions
-- name: 'init disks'
+- name: 'init partitions'
   include: "./fs-init-partitions.yml"
+  tags:
+     - fs
+     - fs.parts
+     - fs.parts.init
 
 # Init MD partitions
 - name: 'init MD'
   include: "./fs-init-md.yml"
+  tags:
+     - fs
+     - fs.md
+     - fs.md.init
 
 # Init LVM partitions
 - name: 'init LVM'
   include: "./fs-init-lvm.yml"
+  tags:
+     - fs
+     - fs.lvm
+     - fs.lvm.init
 
 # ---
 
 # Mount what is needed
 - name: 'mount what is needed'
   include: "./fs-init-mounts.yml"
+  tags:
+     - fs
+     - fs.mount
 
 # ---
 
 # Dump partitions
 - name: 'dump partitions'
   include: "./fs-dump.yml"
+  tags:
+    - fs
+    - fs.dump

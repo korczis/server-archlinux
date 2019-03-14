@@ -4,6 +4,7 @@
   command: 'lvremove -f /dev/vg.main/swap'
   args:
     removes: '/dev/vg.main/swap'
+  ignore_errors: true
 
 - name: "remove a logical volume 'swap' - ansible way"
   lvol:
@@ -11,13 +12,15 @@
     lv: swap
     force: yes
     state: absent
+  ignore_errors: true
 
-# ---
+ # ---
 
 - name: "remove a logical volume 'root' - manual way"
   command: 'lvremove -f /dev/vg.main/root'
   args:
     removes: '/dev/vg.main/root'
+  ignore_errors: true
 
 - name: "remove a logical volume 'root' - ansible way"
   lvol:
@@ -25,6 +28,7 @@
     lv: root
     force: yes
     state: absent
+  ignore_errors: true
 
 # ---
 
@@ -32,11 +36,13 @@
   command: 'pvremove -ffy /dev/md3'
   args:
     removes: '/dev/md3'
+  ignore_errors: true
 
 - name: "remove volume group '/dev/md3' - ansible way"
   lvg:
     vg: vg.main
     pvs: /dev/md3
     force: yes
-    pv_options: '-ff'
+    pv_options: '-ffy'
     state: absent
+  ignore_errors: true

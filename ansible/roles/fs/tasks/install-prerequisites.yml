@@ -1,5 +1,10 @@
 # ---
 
+
+- name: update cache
+  pacman:
+    update_cache: yes
+
 - name: install prerequisites
   package:
     name: "{{ item }}"

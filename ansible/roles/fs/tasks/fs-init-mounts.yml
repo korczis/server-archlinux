@@ -1,5 +1,22 @@
 # ---
 
+- name: 'create /mnt mountpoint'
+  file:
+    path: '/mnt'
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: 'mount /dev/vg.main/root as /mnt'
+  mount:
+    path: '/mnt'
+    src: '/dev/vga.main/root'
+    fstype: ext4
+    state: mounted
+
+# ---
+
 - name: 'create /mnt/boot mountpoint'
   file:
     path: '/mnt/boot'
@@ -27,8 +44,8 @@
 
 - name: 'mount /dev/md1 as /mnt/boot/efi'
   mount:
-    path: /mnt/boot/efi
-    src: /dev/md1
+    path: '/mnt/boot/efi'
+    src: '/dev/md1'
     fstype: vfat
     state: mounted
 
@@ -44,22 +61,27 @@
 
 - name: 'mount /dev/md1 as /mnt/efi'
   mount:
-    path: /mnt/efi
-    src: /dev/md1
+    path: '/mnt/efi'
+    src: '/dev/md1'
     fstype: vfat
     state: mounted
 
 # ---
-
-#- name: 'create /mnt/hostlvm mountpoint'
-#  file:
-#    path: '/mnt/hostlvm'
-#    state: directory
 
 # $ mkdir /mnt/hostlvm
 # $ mount --bind /run/lvm /mnt/hostlvm
 # $ arch-chroot /mnt
 # $ ln -s /hostlvm /run/lvm
 
-#- name:  'mount /run/lvm as /mnt/hostlvm'
-#  command: ' mount --bind /run/lvm /mnt/hostlvm'
+- name: 'create /mnt/hostlvm mountpoint'
+  file:
+    path: '/mnt/hostlvm'
+    state: directory
+
+- name: 'bind mount from host to chroot'
+  mount:
+    path: /mnt/hostlvm
+    src: /run/lvm
+    fstype: none
+    opts: bind
+    state: mounted

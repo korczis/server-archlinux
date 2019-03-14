@@ -1,16 +1,20 @@
 # ---
 
 # Adhoc helper (testing only)
-#- name: 'adhoc commands'
-#  include: "./adhoc.yml"
+- name: 'adhoc commands'
+  include: "./adhoc.yml"
 
 # ---
 
-#- name: 'print disk info'
-#  command: "fdisk -l {{ device.dev }}"
-#  with_items: "{{ fs_layout.devices }}"
-#  loop_control:
-#    loop_var: device
+# Print disk info (debug only)
+- name: 'print disk info'
+  command: "fdisk -l {{ device.dev }}"
+  with_items: "{{ fs_layout.devices }}"
+  loop_control:
+    loop_var: device
+  tags:
+    - never
+    - debug
 
 # ---
 
@@ -30,3 +34,6 @@
 - name: 'install system'
   include: "./install.yml"
 
+# Install bootloader
+- name: 'install bootloader'
+  include: "./bootloader.yml"

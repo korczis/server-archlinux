@@ -11,13 +11,13 @@
     vg: 'vg.main'
     pvs: '/dev/md3'
 
-# ---
-
-- name: 'create a logical volume for swap - 24GB'
-  lvol:
-    vg: 'vg.main'
-    lv: swap
-    size: 24G
+## ---
+#
+#- name: 'create a logical volume for swap - 24GB'
+#  lvol:
+#    vg: 'vg.main'
+#    lv: swap
+#    size: 24G
 
 # ---
 

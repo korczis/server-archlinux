@@ -4,6 +4,7 @@ fs_packages:
   - mkinitcpio
   - dosfstools
   - efibootmgr
+  - kexec-tools
   - refind-efi
 
 fs_kernel_modules:

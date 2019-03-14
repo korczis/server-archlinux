@@ -1,11 +1,18 @@
 # ---
 
-# Cleanup LVM partitions
-- name: 'cleanup LVM'
-  include: "./fs-cleanup-lvm.yml"
+- name: 'adhoc prolog'
+  debug:
+    msg: 'adhoc tasks will run now'
+  tags:
+    - never
+    - adhoc
 
-# ---
-
-# Init LVM partitions
-- name: 'init LVM'
-  include: "./fs-init-lvm.yml"
+## Cleanup LVM partitions
+#- name: 'cleanup LVM'
+#  include: "./fs-cleanup-lvm.yml"
+#
+## ---
+#
+## Init LVM partitions
+#- name: 'init LVM'
+#  include: "./fs-init-lvm.yml"

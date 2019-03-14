@@ -1,0 +1,38 @@
+# ---
+
+# NOTES
+#
+# $ grub-install --recheck --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+# $ grub-install --recheck --target=x86_64-efi --bootloader-id=GRUB --debug --modules="part_gpt part_msdos mdraid09 mdraid1x" --removable /dev/md1
+# $ grub-install --recheck --target=x86_64-efi --bootloader-id=GRUB --debug --modules="part_gpt part_msdos mdraid09 mdraid1x" --removable --efi-directory=/boot/efi
+
+# Alternatively you can move an already installed GRUB EFI executable to the default/fallback path:
+#
+# $ mv esp/EFI/grub esp/EFI/BOOT
+# $ mv esp/EFI/BOOT/grubx64.efi esp/EFI/BOOT/BOOTX64.EFI
+
+- name: 'copy /etc/default/grub'
+  template:
+    src: mnt/etc/default/grub
+    dest: /mnt/etc/default/grub
+  tags:
+    - bootloader
+
+- name: 'ensure /boot/grub directory exists'
+  file:
+    path: /mnt/boot/grub
+    state: directory
+  tags:
+    - bootloader
+    - bootloader.grub.directory
+
+- name: 'copy /root/grub-install.sh'
+  template:
+    src: mnt/root/grub-install.sh
+    dest: /mnt/root/grub-install.sh
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - bootloader
+    - bootloader.grub.script

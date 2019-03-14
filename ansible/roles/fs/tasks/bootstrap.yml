@@ -5,3 +5,6 @@
     name: "{{ item }}"
     state: present
   with_items: "{{ fs_kernel_modules }}"
+  tags:
+    - bootstrap
+    - bootstrap.modules

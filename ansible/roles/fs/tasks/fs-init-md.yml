@@ -12,6 +12,7 @@
           - '/dev/sdc3'
           - '/dev/sdd3'
         filesystem: 'ext4'
+        filesystem_opts: '-f -L root'
         level: '10'
         # mountpoint: '/mnt'
         state: 'present'
@@ -31,6 +32,7 @@
           - '/dev/sdc2'
           - '/dev/sdd2'
         filesystem: 'ext4'
+        filesystem_opts: '-f -L boot'
         level: '1'
         # mountpoint: '/mnt/boot'
         state: 'present'
@@ -56,6 +58,7 @@
           - '/dev/sdc1'
           - '/dev/sdd1'
         filesystem: 'vfat'
+        filesystem_opts: '-F32 -n efi'
         level: '1'
         # mountpoint: '/mnt/boot/efi'
         state: 'present'
@@ -65,7 +68,7 @@
   filesystem:
     fstype: vfat
     force: yes
-    opts: '-F32'
+    opts: '-F32 -n efi'
     dev: '/dev/md1'
 
 # ---
