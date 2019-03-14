@@ -6,17 +6,27 @@
     state: present
     groups:
       - wheel
+  tags:
+    - users
+    - users.ansible
 
-- name: 'import github keys'
-  user:
-    name: "{{ item }}"
-    groups:
-      - wheel
-      - docker
-    generate_ssh_key: yes
-    ssh_key_bits: 4096
-    ssh_key_file: .ssh/id_rsa
-  with_items: "{{ github_users }}"
+# ---
+
+#- name: 'import github keys'
+#  user:
+#    name: "{{ item }}"
+#    groups:
+#      - wheel
+#      - docker
+#    generate_ssh_key: yes
+#    ssh_key_bits: 4096
+#    ssh_key_file: .ssh/id_rsa
+#  with_items: "{{ github_users }}"
+#  tags:
+#      - users
+#      - users.import
+
+# ---
 
 - name: 'set authorized keys taken from github'
   authorized_key:
@@ -24,3 +34,6 @@
     state: present
     key: "https://github.com/{{ item }}.keys"
   with_items: "{{ github_users }}"
+  tags:
+      - users
+      - users.authorize
