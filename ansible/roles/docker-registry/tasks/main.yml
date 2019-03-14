@@ -1,6 +1,6 @@
 ---
 
-- name: create data directory for docker registry
+- name: 'create data directory for docker registry'
   file:
     path: "{{ docker_registry_path }}"
     state: directory
@@ -9,7 +9,7 @@
     mode: 0775
     recurse: yes
 
-- name: create docker-registry.service
+- name: 'create docker-registry.service'
   template:
     src: etc/systemd/system/docker-registry.service
     dest: /etc/systemd/system/docker-registry.service
@@ -17,7 +17,7 @@
     group: root
     mode: 0644
 
-- name: ensure docker-registry service is started and enabled
+- name: 'ensure docker-registry service is started and enabled'
   systemd:
     daemon_reload: true
     name: docker-registry
