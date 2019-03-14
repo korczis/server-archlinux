@@ -7,8 +7,11 @@
     - os                # Upgrade system
     - core              # Core system packages
     - base              # Base tools - tmux, mosh, ...
+    - fail2ban
     - users
     - pacaur
-#    - docker
-#    - docker-registry
+    - docker
+    - docker-registry
+    - kubernetes
     - cockpit
+    - desktop
