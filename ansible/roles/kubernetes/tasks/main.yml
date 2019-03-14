@@ -1,0 +1,10 @@
+# ---
+
+- name: 'install kubernetes using pacaur'
+  become_user: ansible
+  aur:
+    use: pacaur
+    name: "{{ kubernetes_aur_packages }}"
+  tags:
+    - kubernetes
+

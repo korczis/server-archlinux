@@ -1,0 +1,7 @@
+---
+
+kubernetes_packages: []
+
+kubernetes_aur_packages:
+  - etcd
+  - kubernetes
