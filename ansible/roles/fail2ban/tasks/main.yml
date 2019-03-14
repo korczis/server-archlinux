@@ -1,0 +1,71 @@
+# ---
+
+- name: 'install fail2ban packages'
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ fail2ban_packages }}"
+  tags:
+    - fail2ban
+
+# ---
+
+- name: 'ensure /var/log/fail2ban exists'
+  file:
+    path: /var/log/fail2ban
+    state: directory
+  tags:
+    - fail2ban
+
+# ---
+
+- name: 'ensure etc/fail2ban/jail.d/ directory exists'
+  file:
+    path: /etc/fail2ban/jail.d/
+    state: directory
+  tags:
+    - fail2ban
+
+- name: 'copy /etc/fail2ban/jail.d/sshd.local'
+  template:
+    src: etc/fail2ban/jail.d/sshd.local
+    dest: /etc/fail2ban/jail.d/sshd.local
+  tags:
+    - fail2ban
+
+# ---
+
+- name: 'copy /etc/fail2ban/jail.local'
+  template:
+    src: etc/fail2ban/jail.local
+    dest: /etc/fail2ban/jail.local
+  tags:
+    - fail2ban
+
+# ---
+
+- name: 'copy /etc/fail2ban/fail2ban.local'
+  template:
+    src: etc/fail2ban/fail2ban.local
+    dest: /etc/fail2ban/fail2ban.local
+  tags:
+    - fail2ban
+
+# ---
+
+- name: 'copy /etc/fail2ban/fail2ban.conf'
+  template:
+    src: etc/fail2ban/fail2ban.conf
+    dest: /etc/fail2ban/fail2ban.conf
+  tags:
+    - fail2ban
+
+# ---
+
+- name: 'ensure "fail2ban" service is up and running'
+  service:
+    name: fail2ban
+    state: restarted
+    enabled: true
+  tags:
+    - fail2ban
