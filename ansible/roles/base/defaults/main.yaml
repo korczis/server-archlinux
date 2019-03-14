@@ -6,5 +6,8 @@ base_packages:
   - htop
   - mc
   - mosh
+  # - package-query   # TODO: ask @tchabada
   - tmux
   - vim
+  # - yaourt          # TODO: ask @tchabada
+
