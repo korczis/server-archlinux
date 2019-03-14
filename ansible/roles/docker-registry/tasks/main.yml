@@ -8,6 +8,10 @@
     group: docker
     mode: 0775
     recurse: yes
+  tags:
+    - docker
+    - docker.registry
+    - docker.registry.dir
 
 - name: 'create docker-registry.service'
   template:
@@ -16,6 +20,10 @@
     owner: root
     group: root
     mode: 0644
+  tags:
+    - docker
+    - docker.registry
+    - docker.registry.service.create
 
 - name: 'ensure docker-registry service is started and enabled'
   systemd:
@@ -23,11 +31,19 @@
     name: docker-registry
     state: restarted
     enabled: true
+  tags:
+    - docker
+    - docker.registry
+    - docker.registry.service.enable
 
-#- name: use local docker registry
+#- name: 'use local docker registry'
 #  template:
 #    src: etc/sysconfig/docker
 #    dest: /etc/sysconfig/docker
 #    owner: root
 #    group: root
 #    mode: 0644
+#  tags:
+#    - docker
+#    - docker.registry
+#    - docker.registry.use
