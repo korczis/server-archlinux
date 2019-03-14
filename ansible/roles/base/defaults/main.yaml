@@ -1,6 +1,7 @@
 ---
 
 base_packages:
+  - findutils
   - git
   - htop
   - mc
