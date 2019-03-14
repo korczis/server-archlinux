@@ -1,0 +1,7 @@
+---
+
+pacaur_packages:
+  - expac
+  - gnupg
+  - jq
+  - yajl
