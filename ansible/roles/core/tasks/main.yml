@@ -6,19 +6,19 @@
     state: present
   with_items: "{{ core_packages }}"
 
-- name: git clone yay
-  become_user: archer
-  git:
-    repo: 'https://github.com/Jguer/yay.git'
-    dest: "/tmp/yay"
-    update: yes
-    version: v9.1.0
-
-- name: build yay
-  become_user: archer
-  command: makepkg -si
-  args:
-    chdir: /tmp/yay
+#- name: git clone yay
+#  become_user: archer
+#  git:
+#    repo: 'https://github.com/Jguer/yay.git'
+#    dest: "/tmp/yay"
+#    update: yes
+#    version: v9.1.0
+#
+#- name: build yay
+#  become_user: archer
+#  command: makepkg -si
+#  args:
+#    chdir: /tmp/yay
 
 #- name: download cower
 #  get_url:
