@@ -18,6 +18,7 @@
     state: directory
   tags:
     - pacaur
+    - pacaur.tmp
 
 # ---
 
@@ -26,6 +27,7 @@
   shell: 'gpg --recv-keys --yes 1EB2638FF56C0C53'
   tags:
     - pacaur
+    - pacaur.gpg
 
 # ---
 
@@ -36,6 +38,7 @@
     dest: '~/tmp/PKGBUILD-cower'
   tags:
     - pacaur
+    - pacaur.cower
 
 - name: 'build cower'
   become_user: ansible
@@ -44,6 +47,7 @@
     chdir: '~/tmp'
   tags:
     - pacaur
+    - pacaur.cower
 
 - name: 'install cower'
   shell: 'pacman --noconfirm -U cower-18-1-x86_64.pkg.tar.xz'
@@ -51,6 +55,7 @@
     chdir: '/home/ansible/tmp'
   tags:
     - pacaur
+    - pacaur.cower
 
 # ---
 
@@ -61,6 +66,7 @@
     dest: '~/tmp/PKGBUILD-auracle-git'
   tags:
     - pacaur
+    - pacaur.auracle
 
 - name: 'build auracle-git'
   become_user: ansible
@@ -70,6 +76,7 @@
     creates: '/usr/bin/auracle'
   tags:
     - pacaur
+    - pacaur.auracle
 
 - name: 'install auracle-git'
   shell: 'pacman --noconfirm -U auracle-git-r210.4a94781-1-x86_64.pkg.tar.xz'
@@ -78,6 +85,7 @@
     creates: '/usr/bin/auracle'
   tags:
     - pacaur
+    - pacaur.auracle
 
 # ---
 
@@ -88,6 +96,7 @@
     dest: '~/tmp/PKGBUILD-pacaur'
   tags:
     - pacaur
+    - pacaur.pacaur
 
 - name: 'build pacaur'
   become_user: ansible
@@ -97,6 +106,7 @@
     creates: '/usr/bin/pacaur'
   tags:
     - pacaur
+    - pacaur.pacaur
 
 - name: 'install pacaur'
   shell: 'pacman --noconfirm -U pacaur-4.8.4-1-any.pkg.tar.xz'
@@ -105,3 +115,4 @@
     creates: '/usr/bin/pacaur'
   tags:
     - pacaur
+    - pacaur.pacaur
