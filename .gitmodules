@@ -1,12 +1,9 @@
-[submodule "ansible/external/mdadm"]
-	path = ansible/external/ansible-mdadm
-	url = https://github.com/korczis/ansible-mdadm.git
-[submodule "ansible/modules/aur"]
-	path = ansible/modules/aur
-	url = https://github.com/kewlfft/ansible-aur.git
-[submodule "ansible/modules/makepkg"]
-	path = ansible/modules/makepkg
-	url = https://github.com/gunzy83/ansible-makepkg.git
 [submodule "ansible/external/ansible-mdadm"]
 	path = ansible/external/ansible-mdadm
 	url = https://github.com/korczis/ansible-mdadm.git
+[submodule "ansible/modules/ansible-aur"]
+	path = ansible/modules/ansible-aur
+	url = https://github.com/kewlfft/ansible-aur.git
+[submodule "ansible/modules/makepkg"]
+	path = ansible/modules/ansible-makepkg
+	url = https://github.com/gunzy83/ansible-makepkg.git
