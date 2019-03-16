@@ -7,6 +7,10 @@
     owner: root
     group: root
     mode: 0644
+  tags:
+     - fs
+     - fs.md
+     - fs.md.conf
 
 # ---
 

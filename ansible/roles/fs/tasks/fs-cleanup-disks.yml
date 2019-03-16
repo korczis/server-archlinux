@@ -1,7 +1,13 @@
 # ---
 
-- name: remove parititons
-  include: "./remove-partitions.yml fs_device={{device.dev}}"
-  with_items: "{{ fs_layout.devices }}"
-  loop_control:
-    loop_var: device
+- name: 'remove partitions'
+  shell: 'wipefs -f -a /dev/sd{a,b,c,d}'
+
+- name: 'partprobe'
+  shell: 'partprobe /dev/sd{a,b,c,d}'
+
+#- name: remove parititons
+#  include: "./remove-partitions.yml fs_device={{device.dev}}"
+#  with_items: "{{ fs_layout.devices }}"
+#  loop_control:
+#    loop_var: device

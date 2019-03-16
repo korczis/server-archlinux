@@ -1,21 +1,50 @@
 # ---
 
-- block:
-  - name: 'unmount md devices'
-    mount:
-      path: "{{ item.dev }}"
-      opts: '-l'
-      state: unmounted
-    with_items:
-      - "{{ fs_layout.arrays }}"
+- name: 'remove md arrays'
+  include_role:
+    name: ansible-mdadm
+  vars:
+    mdadm_arrays:
+      - name: 'md1'
+        devices:
+          - '/dev/sda1'
+          - '/dev/sdb1'
+          - '/dev/sdc1'
+          - '/dev/sdd1'
+        state: 'absent'
 
-- name: 'remove arrays'
-  command: "mdadm --remove {{ array.dev }}"
-  with_items: "{{ fs_layout.arrays }}"
-  loop_control:
-    loop_var: array
-  args:
-    removes: "{{ array.dev }}"
+      - name: 'md2'
+        devices:
+          - '/dev/sda2'
+          - '/dev/sdb2'
+          - '/dev/sdc2'
+          - '/dev/sdd2'
+        state: 'absent'
 
-- name: 'stop md devices using --scan'
-  command: 'mdadm --stop --scan'
+      - name: 'md3'
+        devices:
+          - '/dev/sda3'
+          - '/dev/sdb3'
+          - '/dev/sdc3'
+          - '/dev/sdd3'
+        state: 'absent'
+
+#- block:
+#  - name: 'unmount md devices'
+#    mount:
+#      path: "{{ item.dev }}"
+#      opts: '-l'
+#      state: unmounted
+#    with_items:
+#      - "{{ fs_layout.arrays }}"
+#
+#- name: 'remove arrays'
+#  command: "mdadm --remove {{ array.dev }}"
+#  with_items: "{{ fs_layout.arrays }}"
+#  loop_control:
+#    loop_var: array
+#  args:
+#    removes: "{{ array.dev }}"
+#
+#- name: 'stop md devices using --scan'
+#  command: 'mdadm --stop --scan'

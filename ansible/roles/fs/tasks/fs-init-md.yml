@@ -16,15 +16,8 @@
         level: '10'
         # mountpoint: '/mnt'
         state: 'present'
-        force: true
+        # force: true
 
-# ---
-
-- name: 'create /dev/md2 - /boot'
-  include_role:
-    name: ansible-mdadm
-  vars:
-    mdadm_arrays:
       - name: 'md2'
         devices:
           - '/dev/sda2'
@@ -36,21 +29,8 @@
         level: '1'
         # mountpoint: '/mnt/boot'
         state: 'present'
-        force: true
+        # force: true
 
-- name: 'format /dev/md1 - /boot'
-  filesystem:
-    fstype: ext4
-    force: yes
-    dev: '/dev/md2'
-
-# ---
-
-- name: 'create /dev/md1 - /boot/efi'
-  include_role:
-    name: ansible-mdadm
-  vars:
-    mdadm_arrays:
       - name: 'md1'
         devices:
           - '/dev/sda1'
@@ -62,14 +42,60 @@
         level: '1'
         # mountpoint: '/mnt/boot/efi'
         state: 'present'
-        force: true
+        # force: true
 
-- name: 'format /dev/md1 - /boot/efi'
-  filesystem:
-    fstype: vfat
-    force: yes
-    opts: '-F32 -n efi'
-    dev: '/dev/md1'
+# ---
+
+#- name: 'create /dev/md2 - /boot'
+#  include_role:
+#    name: ansible-mdadm
+#  vars:
+#    mdadm_arrays:
+#      - name: 'md2'
+#        devices:
+#          - '/dev/sda2'
+#          - '/dev/sdb2'
+#          - '/dev/sdc2'
+#          - '/dev/sdd2'
+#        filesystem: 'ext4'
+#        filesystem_opts: '-f -L boot'
+#        level: '1'
+#        # mountpoint: '/mnt/boot'
+#        state: 'present'
+#        force: true
+
+#- name: 'format /dev/md1 - /boot'
+#  filesystem:
+#    fstype: ext4
+#    force: yes
+#    dev: '/dev/md2'
+
+# ---
+
+#- name: 'create /dev/md1 - /boot/efi'
+#  include_role:
+#    name: ansible-mdadm
+#  vars:
+#    mdadm_arrays:
+#      - name: 'md1'
+#        devices:
+#          - '/dev/sda1'
+#          - '/dev/sdb1'
+#          - '/dev/sdc1'
+#          - '/dev/sdd1'
+#        filesystem: 'vfat'
+#        filesystem_opts: '-F32 -n efi'
+#        level: '1'
+#        # mountpoint: '/mnt/boot/efi'
+#        state: 'present'
+#        force: true
+
+#- name: 'format /dev/md1 - /boot/efi'
+#  filesystem:
+#    fstype: vfat
+#    force: yes
+#    opts: '-F32 -n efi'
+#    dev: '/dev/md1'
 
 # ---
 
