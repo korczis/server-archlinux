@@ -10,3 +10,6 @@
 [submodule "external/packer-arch"]
 	path = external/packer-arch
 	url = https://github.com/korczis/packer-arch.git
+[submodule "external/arch-boxes"]
+	path = external/arch-boxes
+	url = https://github.com/korczis/arch-boxes.git
