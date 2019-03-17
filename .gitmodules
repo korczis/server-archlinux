@@ -7,3 +7,6 @@
 [submodule "ansible/external/ansible-mdadm"]
 	path = ansible/external/ansible-mdadm
 	url = https://github.com/korczis/ansible-mdadm.git
+[submodule "external/packer-arch"]
+	path = external/packer-arch
+	url = https://github.com/korczis/packer-arch.git
