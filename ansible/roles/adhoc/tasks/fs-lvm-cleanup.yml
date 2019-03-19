@@ -1,0 +1,11 @@
+# ---
+
+- name: "remove volume - swap"
+  shell: 'lvremove -f /dev/vg.main/swap'
+  args:
+    removes: '/dev/vg.main/swap'
+
+- name: "remove volume - root"
+  shell: 'lvremove -f /dev/vg.main/root'
+  args:
+    removes: '/dev/vg.main/root'

@@ -1,0 +1,81 @@
+# ---
+
+- name: 'print banner'
+  debug:
+    msg: 'fs-parts-init'
+
+# ---
+
+- name: "create 1GiB /boot/efi - {{ device.dev }}"
+  parted:
+    device: "{{ device.dev }}"
+    number: "{{ idx + 1 }}"
+    state: 'present'
+    part_start: '1MiB'
+    part_end: '1GiB'
+    flags: [ boot, esp ]
+    label: 'gpt'
+    name: "{{ device.name }}-efi"
+
+- name: "format /boot/efi - {{ device.dev }}"
+  filesystem:
+    fstype: 'vfat'
+    force: 'yes'
+    dev:  "{{ device.dev }}1"
+    opts: "-F32 -n {{ device.name }}-efi"
+
+- name: 'set bootable flag for /boot partitions - {{ device.dev }}'
+  shell: "parted -s {{ device.dev }} set 1 boot on"
+
+- name: 'set esp flag for /boot partitions - {{ device.dev }}'
+  shell: "parted -s {{ device.dev }} set 1 esp on"
+
+# ---
+
+- name: "create 1GiB /boot - {{ device.dev }}"
+  parted:
+    device: "{{ device.dev }}"
+    number: "{{ idx + 2 }}"
+    state: 'present'
+    part_start: '1GiB'
+    part_end: '2GiB'
+    label: 'gpt'
+    name: "{{ device.name }}-boot"
+
+- name: "format /boot - {{ device.dev }}"
+  filesystem:
+    fstype: 'ext4'
+    force: 'yes'
+    dev:  "{{ device.dev }}2"
+    opts: "-L {{ device.name }}-boot"
+
+#- name: 'set bootable flag for /boot partitions - {{ device.dev }}'
+#  shell: "parted -s {{ device.dev }} set 2 boot on"
+#
+#- name: 'set esp flag for /boot partitions - {{ device.dev }}'
+#  shell: "parted -s {{ device.dev }} set 2 esp on"
+
+# ---
+
+- name:  "create / - {{ device.dev }}"
+  parted:
+    device: "{{ device.dev }}"
+    number: "{{ idx + 3 }}"
+    flags: [ lvm ]
+    state: 'present'
+    part_start: '2GiB'
+    part_end: '100%'
+    label: 'gpt'
+    name: "{{ device.name }}-root"
+
+# ---
+
+#- name: "format / - {{ device.dev }}"
+#  filesystem:
+#    fstype: 'ext4'
+#    force: 'yes'
+#    dev:  "{{ device.dev }}3"
+#    opts: " -L {{ device.name }}-root"
+
+- name: 'partprobe - {{ device.dev }}'
+  shell: 'partprobe {{ device.dev }}'

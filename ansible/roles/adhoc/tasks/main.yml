@@ -1,0 +1,111 @@
+# ---
+
+- name: 'print banner'
+  debug:
+    msg: 'main'
+  tags:
+    - fs
+    - fs.banner
+
+# ---
+
+- name: 'cleanup mounts'
+  include: ./fs-mounts-cleanup.yml
+  tags:
+    - fs
+    - fs.cleanup
+    - fs.mounts
+    - fs.mounts.cleanup
+
+# ---
+
+- name: 'cleanup lvm'
+  include: ./fs-lvm-cleanup.yml
+  tags:
+    - fs
+    - fs.cleanup
+    - fs.lvm
+    - fs.lvm.cleanup
+
+# ---
+
+- name: 'cleanup md'
+  include: ./fs-md-cleanup.yml device={{item}} idx={{idx}}
+  with_items:
+    - '/dev/md1'
+    - '/dev/md2'
+    - '/dev/md3'
+  loop_control:
+    index_var: idx
+  tags:
+    - fs
+    - fs.cleanup
+    - fs.md
+    - fs.md.cleanup
+
+# ---
+
+- name: 'cleanup parts'
+  include: ./fs-parts-cleanup.yml device={{item}} idx={{idx}}
+  with_items: "{{ fs_layout.devices }}"
+  loop_control:
+    index_var: idx
+  tags:
+    - fs
+    - fs.cleanup
+    - fs.parts
+    - fs.parts.cleanup
+
+
+# ---
+
+- name: 'initialize parts'
+  include: ./fs-parts-init.yml device={{item}} idx={{idx}}
+  with_items: "{{ fs_layout.devices }}"
+  loop_control:
+    index_var: idx
+  tags:
+    - fs
+    - fs.initialize
+    - fs.parts
+    - fs.parts.init
+
+# ---
+
+- name: 'initialize md'
+  include: ./fs-md-init.yml
+  tags:
+    - fs
+    - fs.initialize
+    - fs.md
+    - fs.md.init
+
+# ---
+
+- name: 'initialize lvm'
+  include: ./fs-lvm-init.yml
+  tags:
+    - fs
+    - fs.initialize
+    - fs.lvm
+    - fs.lvm.init
+
+# ---
+
+#- name: 'install os'
+#  include: ./os-install.yml
+#  tags:
+#    - fs
+#    - fs.install
+#    - fs.os
+#    - fs.os.install
+
+# ---
+
+#- name: 'initialize mounts'
+#  include: ./fs-mounts-init.yml
+#  tags:
+#    - fs
+#    - fs.initialize
+#    - fs.mounts
+#    - fs.mounts.init

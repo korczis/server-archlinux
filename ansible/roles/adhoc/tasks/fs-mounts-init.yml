@@ -1,0 +1,82 @@
+# ---
+
+- name: 'print banner'
+  debug:
+    msg: 'fs-mounts-init'
+
+# ---
+
+- name: 'create mountpoint - /mnt/boot'
+  file:
+    path: '/mnt/boot'
+    state: 'directory'
+
+- name: 'format /dev/md2'
+  filesystem:
+    fstype: 'ext4'
+    dev: '/dev/md2'
+    opts: '-F -L boot'
+    force: yes
+
+- name: 'partprobe - /dev/md2'
+  shell: 'partprobe'
+
+- name: 'mount /dev/md2 - /mnt/boot'
+  mount:
+    path: '/mnt/boot'
+    src: '/dev/md2'
+    fstype: 'auto'
+    state: 'mounted'
+
+# ---
+
+- name: 'create mountpoint - /mnt/boot/efi'
+  file:
+    path: '/mnt/boot/efi'
+    state: 'directory'
+
+- name: 'format /dev/md1'
+  filesystem:
+    fstype: 'vfat'
+    dev: '/dev/md1'
+    opts: '-F32 -n EFI'
+    force: yes
+
+- name: 'partprobe - /dev/md1'
+  shell: 'partprobe'
+
+- name: 'mount /dev/md1 - /mnt/boot/efi'
+  mount:
+    path: '/mnt/boot/efi'
+    src: '/dev/md1'
+    fstype: 'auto'
+    state: 'mounted'
+
+# ---
+
+#- name: 'create mountpoint - /mnt/efi'
+#  file:
+#    path: '/mnt/efi'
+#    state: 'directory'
+#
+#- name: 'mount /dev/md1 - /mnt/efi'
+#  mount:
+#    path: '/mnt/efi'
+#    src: '/dev/md1'
+#    fstype: 'vfat'
+#    state: 'mounted'
+
+# ---
+
+- name: 'crete mountpoint - /mnt/hostlvm'
+  file:
+    path: '/mnt/hostlvm'
+    state: 'directory'
+
+- name: 'mount /run/lvm - /mnt/hostlvm'
+  shell: 'mount --bind /run/lvm /mnt/hostlvm'
+
+# ---
+
+- name: 'probe parts - /mnt/hostlvm'
+  shell: 'partprobe'

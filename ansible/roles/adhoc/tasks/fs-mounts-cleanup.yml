@@ -1,0 +1,25 @@
+# ---
+
+- name: 'print banner'
+  debug:
+    msg: 'fs-mounts-cleanup'
+
+# ---
+
+- name: 'unmount /mnt'
+  shell: 'umount -R /mnt'
+  ignore_errors: yes
+
+- name: 'unmount other mounts'
+  mount:
+    path: "{{ item }}"
+    state: 'unmounted'
+  with_items:
+    - '/mnt/hostlvm'
+    - '/mnt/boot/efi'
+    - '/mnt/boot'
+    - '/mnt'
+    - '/dev/md1'
+    - '/dev/md2'
+    - '/dev/md3'
+

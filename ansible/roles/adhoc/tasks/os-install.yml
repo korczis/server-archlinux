@@ -1,0 +1,50 @@
+# ---
+
+- name: 'print banner'
+  debug:
+    msg: 'os-install'
+
+# ---
+
+- name: 'copy /mnt/etc/mdadm.conf'
+  template:
+    src: 'etc/mdadm.conf'
+    dest: '/etc/mdadm.conf'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+
+# ---
+- name: 'create mountpoint - /mnt'
+  file:
+    path: '/mnt'
+    state: 'directory'
+
+- name: 'mount /dev/vg.main/root - /mnt'
+  mount:
+    path: '/mnt'
+    src: '/dev/vg.main/root'
+    fstype: 'ext4'
+    state: 'mounted'
+
+# ---
+
+- name: 'initialize mounts'
+  include: './fs-mounts-init.yml'
+
+# ---
+
+- name: 'pacstrap /mnt'
+  shell: "pacstrap /mnt {{ pacstrap_packages | join(' ') }}"
+
+# ---
+
+- name: 'generate /mnt/etc/fstab'
+  shell: 'genfstab -U /mnt > /mnt/etc/fstab'
+
+# ---
+
+- name: 'copy /etc/mkinitcpio.conf'
+  template:
+    src: 'mnt/etc/mkinitcpio.conf'
+    dest: '/mnt/etc/mkinitcpio.conf'

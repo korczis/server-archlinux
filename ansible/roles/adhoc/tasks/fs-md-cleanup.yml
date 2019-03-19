@@ -1,0 +1,39 @@
+# ---
+
+- name: 'print banner'
+  debug:
+    msg: 'fs-md-cleanup'
+
+# ---
+
+- name: 'remove old /etc/mdadm.conf'
+  file:
+    state: 'absent'
+    path: '/etc/mdadm.conf'
+
+# ---
+
+- name: 'copy /etc/mdadm.conf (clean)'
+  template:
+    src: 'etc/mdadm.conf'
+    dest: '/etc/mdadm.conf'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+
+# ---
+
+- name: 'remove superblock - {{ device }}'
+  shell: "mdadm --misc --zero-superblock {{ device }}"
+
+# ---
+
+- name: 'stop md devices using --scan'
+  command: 'mdadm --stop --scan'
+
+# ---
+
+- name: "remove array - {{ device }}"
+  shell: "mdadm --remove {{ device }}"
+  args:
+    removes: "{{ device }}"

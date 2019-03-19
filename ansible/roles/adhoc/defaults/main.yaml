@@ -1,0 +1,85 @@
+---
+
+fs_packages:
+  - mkinitcpio
+  - dosfstools
+  - efibootmgr
+  - kexec-tools
+  - refind-efi
+
+fs_kernel_modules:
+  - raid0
+  - raid1
+  - raid10
+
+fs_layout:
+  # Devices specifications
+  devices:
+    - dev: /dev/sda
+      label: gpt
+      name: sda
+    - dev: /dev/sdb
+      label: gpt
+      name: sdb
+    - dev: /dev/sdc
+      label: gpt
+      name: sdc
+    - dev: /dev/sdd
+      label: gpt
+      name: sdd
+
+  # Arrays declarations
+  arrays:
+    # /boot/efi
+    - name: md1
+      dev: /dev/md1
+      mountpoint: /mnt/md1
+      devices:
+        - /dev/sda1
+        - /dev/sdb1
+        - /dev/sdc1
+        - /dev/sdd1
+    # /boot
+    - name: md2
+      dev: /dev/md2
+      mountpoint: /mnt/md2
+      devices:
+        - /dev/sda2
+        - /dev/sdb2
+        - /dev/sdc2
+        - /dev/sdd2
+    # /
+    - name: md3
+      dev: /dev/md3
+      mountpoint: /mnt/md3
+      devices:
+        - /dev/sda3
+        - /dev/sdb3
+        - /dev/sdc3
+        - /dev/sdd3
+
+pacstrap_packages:
+  - 'base'
+  - 'base-devel'
+  - 'dosfstools'
+  - 'efibootmgr'
+  - 'efitools'
+  - 'efivar'
+  - 'findutils'
+  - 'fwupd'
+  - 'gdisk'
+  - 'git'
+  - 'htop'
+  - 'imagemagick'
+  - 'intel-ucode'
+  - 'kexec-tools'
+  - 'mc'
+  - 'mosh'
+  - 'openssh'
+  - 'refind-efi'
+  - 'sbsigntools'
+  - 'sudo'
+  - 'parted'
+  - 'tmux'
+  - 'tree'
+  - 'vim'

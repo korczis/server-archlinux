@@ -1,0 +1,60 @@
+# ---
+
+- name: 'print banner'
+  debug:
+    msg: 'fs-md-init'
+
+#- name: 'copy /mnt/etc/mdadm.conf'
+#  template:
+#    src: 'etc/mdadm.conf'
+#    dest: '/etc/mdadm.conf'
+#    owner: 'root'
+#    group: 'root'
+#    mode: '0644'
+
+- name: 'create /dev/md3 - /'
+  include_role:
+    name: ansible-mdadm
+  vars:
+    mdadm_arrays:
+      - name: 'md3'
+        devices:
+          - '/dev/sda3'
+          - '/dev/sdb3'
+          - '/dev/sdc3'
+          - '/dev/sdd3'
+        filesystem: 'ext4'
+        filesystem_opts: '-F -L root'
+        level: '10'
+        # mountpoint: '/mnt'
+        state: 'present'
+        force: true
+
+      - name: 'md2'
+        devices:
+          - '/dev/sda2'
+          - '/dev/sdb2'
+          - '/dev/sdc2'
+          - '/dev/sdd2'
+        filesystem: 'ext4'
+        filesystem_opts: '-F -L boot'
+        level: '1'
+        # mountpoint: '/mnt/boot'
+        state: 'present'
+        force: true
+
+      - name: 'md1'
+        devices:
+          - '/dev/sda1'
+          - '/dev/sdb1'
+          - '/dev/sdc1'
+          - '/dev/sdd1'
+        filesystem: 'vfat'
+        filesystem_opts: '-F32 -n EFI'
+        level: '1'
+        # mountpoint: '/mnt/boot/efi'
+        state: 'present'
+        force: true
+
+#- name: 'partprobe new uuids'
+#  shell: 'partprobe'

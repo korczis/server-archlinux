@@ -1,0 +1,13 @@
+# ---
+
+- name: 'print banner'
+  debug:
+    msg: 'fs-parts-cleanup'
+
+# ---
+
+- name: 'remove partitions - {{ device.dev }}'
+  shell: 'wipefs -f -a {{ device.dev }}'
+
+- name: 'partprobe - {{ device.dev }}'
+  shell: 'partprobe {{ device.dev }}'

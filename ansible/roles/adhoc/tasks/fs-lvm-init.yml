@@ -1,0 +1,55 @@
+# ---
+
+# References
+#
+# - https://cplatform99.blogspot.com/2017/05/lvm-configuration-using-ansible-in.html
+# - https://docs.ansible.com/ansible/latest/modules/lvg_module.html
+# - https://docs.ansible.com/ansible/latest/modules/lvol_module.html
+
+- name: 'create a volume group on top of /dev/md3'
+  lvg:
+    vg: 'vg.main'
+    pvs: '/dev/md3'
+
+# ---
+
+#- name: 'create a logical volume for swap - 24GB'
+#  lvol:
+#    vg: 'vg.main'
+#    lv: swap
+#    size: 24G
+
+# ---
+
+
+- name: 'create a logical volume for root - 75%'
+  lvol:
+    vg: 'vg.main'
+    lv: 'root'
+    size: '+75%FREE'
+    resizefs: true
+
+# -
+
+- name: 'format /dev/vg.main/root'
+  filesystem:
+    fstype: 'ext4'
+    force: yes
+    dev: '/dev/vg.main/root'
+
+# ---
+
+- name: 'create a logical volume for snapshots - remaining space'
+  lvol:
+    vg: 'vg.snapshots'
+    lv: 'root'
+    size: '+100%FREE'
+    resizefs: true
+
+# -
+
+- name: 'format /dev/vg.main/snapshots'
+  filesystem:
+    fstype: 'ext4'
+    force: yes
+    dev: '/dev/vg.main/snapshots'
