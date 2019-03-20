@@ -1,5 +1,12 @@
 # server-archlinux
 
+## Getting Started
+
+- boot from usb/dvd
+- run `./playbook-minimal.sh`
+- reboot with bootable media removed
+- run ...
+
 ## Links 
 
 - https://itsfoss.com/install-arch-linux/
