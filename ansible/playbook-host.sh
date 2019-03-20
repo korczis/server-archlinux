@@ -5,4 +5,4 @@ echo "| Host Provisioning |"
 echo "+-------------------+"
 echo
 
-ansible-playbook -v "$@" host-role.yml
+ansible-playbook -v "$@" playbook-host.yml

@@ -5,4 +5,4 @@ echo "| Ad-hoc Provisioning |"
 echo "+---------------------+"
 echo
 
-ansible-playbook -v "$@" adhoc-role.yml
+ansible-playbook -v "$@" playbook-adhoc.yml

@@ -5,4 +5,4 @@ echo "| Server Provisioning |"
 echo "+---------------------+"
 echo
 
-ansible-playbook -v "$@" server-role.yml
+ansible-playbook -v "$@" playbook-server.yml
