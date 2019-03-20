@@ -5,3 +5,4 @@ pacaur_packages:
   - gnupg
   - jq
   - yajl
+  - perl

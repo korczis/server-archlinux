@@ -1,0 +1,99 @@
+# ---
+
+- name: 'create tmp directory'
+  file:
+    path: ~/tmp
+    state: directory
+  tags:
+    - pacaur
+    - pacaur.tmp
+
+# ---
+
+- name: 'import pacaur gpg key'
+  shell: 'gpg --recv-keys --yes 1EB2638FF56C0C53'
+  tags:
+    - pacaur
+    - pacaur.gpg
+
+# ---
+
+- name: 'download cower'
+  get_url:
+    url: 'https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower'
+    dest: '~/tmp/PKGBUILD-cower'
+  tags:
+    - pacaur
+    - pacaur.cower
+
+- name: 'build cower'
+  shell: 'makepkg -sfp PKGBUILD-cower --noconfirm'
+  args:
+    chdir: '~/tmp'
+  tags:
+    - pacaur
+    - pacaur.cower
+
+- name: 'install cower'
+  shell: 'sudo pacman --noconfirm -U cower-18-1-x86_64.pkg.tar.xz'
+  args:
+    chdir: '~/tmp'
+  tags:
+    - pacaur
+    - pacaur.cower
+
+# ---
+
+- name: 'download auracle-git'
+  get_url:
+    url: 'https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=auracle-git'
+    dest: '~/tmp/PKGBUILD-auracle-git'
+  tags:
+    - pacaur
+    - pacaur.auracle
+
+- name: 'build auracle-git'
+  shell: 'makepkg -sfp PKGBUILD-auracle-git --noconfirm'
+  args:
+    chdir: '~/tmp'
+    creates: '/usr/bin/auracle'
+  tags:
+    - pacaur
+    - pacaur.auracle
+
+- name: 'install auracle-git'
+  shell: 'sudo pacman --noconfirm -U auracle-git-r210.4a94781-1-x86_64.pkg.tar.xz'
+  args:
+    chdir: '~/tmp'
+    creates: '/usr/bin/auracle'
+  tags:
+    - pacaur
+    - pacaur.auracle
+
+# ---
+
+- name: 'download pacaur'
+  get_url:
+    url: 'https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur'
+    dest: '~/tmp/PKGBUILD-pacaur'
+  tags:
+    - pacaur
+    - pacaur.pacaur
+
+- name: 'build pacaur'
+  shell: 'makepkg -sfp PKGBUILD-pacaur --noconfirm'
+  args:
+    chdir: '~/tmp'
+    creates: '/usr/bin/pacaur'
+  tags:
+    - pacaur
+    - pacaur.pacaur
+
+- name: 'install pacaur'
+  shell: 'sudo pacman --noconfirm -U pacaur-4.8.4-1-any.pkg.tar.xz'
+  args:
+    chdir: '~/tmp'
+    creates: '/usr/bin/pacaur'
+  tags:
+    - pacaur
+    - pacaur.pacaur

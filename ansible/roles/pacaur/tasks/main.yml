@@ -9,110 +9,20 @@
     - pacaur
     - pacaur.prerequisites
 
-# ---
-
-- name: 'create tmp directory'
-  become_user: ansible
+- name: 'create pod2man symlink'
   file:
-    path: ~/tmp
-    state: directory
+    src: '/usr/bin/core_perl/pod2man'
+    dest: '/usr/local/bin/pod2man'
+    state: 'link'
   tags:
     - pacaur
-    - pacaur.tmp
+    - pacaur.pod2man
 
 # ---
-
-- name: 'import pacaur gpg key'
-  become_user: ansible
-  shell: 'gpg --recv-keys --yes 1EB2638FF56C0C53'
-  tags:
-    - pacaur
-    - pacaur.gpg
-
-# ---
-
-- name: 'download cower'
-  become_user: ansible
-  get_url:
-    url: 'https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower'
-    dest: '~/tmp/PKGBUILD-cower'
-  tags:
-    - pacaur
-    - pacaur.cower
-
-- name: 'build cower'
-  become_user: ansible
-  shell: 'makepkg -si -p PKGBUILD-cower --noconfirm'
-  args:
-    chdir: '~/tmp'
-  tags:
-    - pacaur
-    - pacaur.cower
-
-- name: 'install cower'
-  shell: 'pacman --noconfirm -U cower-18-1-x86_64.pkg.tar.xz'
-  args:
-    chdir: '/home/ansible/tmp'
-  tags:
-    - pacaur
-    - pacaur.cower
-
-# ---
-
-- name: 'download auracle-git'
-  become_user: ansible
-  get_url:
-    url: 'https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=auracle-git'
-    dest: '~/tmp/PKGBUILD-auracle-git'
-  tags:
-    - pacaur
-    - pacaur.auracle
-
-- name: 'build auracle-git'
-  become_user: ansible
-  shell: 'makepkg -si -p PKGBUILD-auracle-git --noconfirm'
-  args:
-    chdir: '~/tmp'
-    creates: '/usr/bin/auracle'
-  tags:
-    - pacaur
-    - pacaur.auracle
-
-- name: 'install auracle-git'
-  shell: 'pacman --noconfirm -U auracle-git-r210.4a94781-1-x86_64.pkg.tar.xz'
-  args:
-    chdir: '/home/ansible/tmp'
-    creates: '/usr/bin/auracle'
-  tags:
-    - pacaur
-    - pacaur.auracle
-
-# ---
-
-- name: 'download pacaur'
-  become_user: ansible
-  get_url:
-    url: 'https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur'
-    dest: '~/tmp/PKGBUILD-pacaur'
-  tags:
-    - pacaur
-    - pacaur.pacaur
 
 - name: 'build pacaur'
   become_user: ansible
-  shell: 'makepkg -si -p PKGBUILD-pacaur --noconfirm'
-  args:
-    chdir: '~/tmp'
-    creates: '/usr/bin/pacaur'
+  include: "./build.yml"
   tags:
     - pacaur
-    - pacaur.pacaur
-
-- name: 'install pacaur'
-  shell: 'pacman --noconfirm -U pacaur-4.8.4-1-any.pkg.tar.xz'
-  args:
-    chdir: '/home/ansible/tmp'
-    creates: '/usr/bin/pacaur'
-  tags:
-    - pacaur
-    - pacaur.pacaur
+    - pacaur.build
