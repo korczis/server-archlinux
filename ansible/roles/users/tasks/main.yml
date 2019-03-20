@@ -12,19 +12,19 @@
 
 # ---
 
-#- name: 'import github keys'
-#  user:
-#    name: "{{ item }}"
-#    groups:
-#      - wheel
-#      - docker
-#    generate_ssh_key: yes
-#    ssh_key_bits: 4096
-#    ssh_key_file: .ssh/id_rsa
-#  with_items: "{{ github_users }}"
-#  tags:
-#      - users
-#      - users.import
+- name: 'import github keys'
+  user:
+    name: "{{ item }}"
+    groups:
+      - wheel
+      - docker
+    generate_ssh_key: yes
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/id_rsa
+  with_items: "{{ github_users }}"
+  tags:
+      - users
+      - users.import
 
 # ---
 
