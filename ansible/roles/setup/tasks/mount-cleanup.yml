@@ -1,0 +1,8 @@
+---
+
+- debug: msg="mount-cleanup {{ mount }}"
+
+- name: "unmount - {{ mount.path }} - {{ mount.src }} ({{ mount.fstype }})"
+  mount:
+    path: "{{ mount.path }}"
+    state: unmounted

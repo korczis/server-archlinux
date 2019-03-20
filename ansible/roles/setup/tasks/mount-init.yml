@@ -1,0 +1,15 @@
+---
+
+- debug: msg="mount-init {{ mount }}"
+
+- name: "create mountpoint - {{ mount.path }}"
+  file:
+    path: "{{ mount.path }}"
+    state: directory
+
+- name: "mount - {{ mount.path }} - {{ mount.src }} ({{ mount.fstype }})"
+  mount:
+    path: "{{ mount.path }}"
+    src: "{{ mount.src }}"
+    fstype: "{{ mount.fstype }}"
+    state: mounted

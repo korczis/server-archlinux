@@ -1,0 +1,28 @@
+---
+
+- debug: msg="install-guest"
+
+- name: 'run mkinitcpio'
+  shell: 'arch-chroot /mnt mkinitcpio -p linux'
+
+- name: 'run grub-install'
+  shell: 'arch-chroot /mnt grub-install --recheck --target=x86_64-efi --bootloader-id=BOOT --debug --modules="part_gpt part_msdos" --efi-directory=/boot/efi --removable'
+
+- name: 'run grub-mkconfig'
+  shell: 'arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg'
+
+
+- name: 'enable dhcpcd'
+  shell: 'arch-chroot /mnt systemctl enable dhcpcd'
+
+- name: 'enable sshd'
+  shell: 'arch-chroot /mnt systemctl enable sshd'
+
+- name: 'create ~/.ssh'
+  shell: 'arch-chroot /mnt mkdir -p ~/.ssh'
+
+- name: 'curl keys'
+  shell: 'arch-chroot /mnt curl https://github.com/korczis.keys > ~/.ssh/authorized_keys'
+
+- name: 'chmod keys'
+  shell: 'arch-chroot /mnt chmod 600 ~/.ssh/authorized_keys'

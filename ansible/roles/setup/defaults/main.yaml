@@ -1,0 +1,78 @@
+---
+
+setup_layout:
+  core_packages:
+    # - arch-install-scripts
+    - base
+    - base-devel
+    - ansible
+    # - dosfstools
+    - efibootmgr
+    - efitools
+    - efivar
+    # - expac
+    # - findutils
+    - fwupd
+    # - gdisk
+    - git
+    # - gnupg
+    # - gptfdisk
+    - grub
+    - htop
+    # - imagemagick
+    # - jq
+    # - kexec-tools
+    # - linux-tools
+    # - mc
+    # - mkinitcpio
+    - mosh
+    - openssh
+    # - openssl
+    # - parted
+    # - python-pip
+    # - python-linux-procfs
+    # - python-pyudev
+    # - refind-efi
+    - sbsigntools
+    - sudo
+    - tmux
+    # - ucode-intel
+    # - udisks2
+    - vim
+    # - yajl
+
+  disks:
+    - device: /dev/sdf
+      label: 'gpt'
+      parts:
+        - name: 'EFI'
+          filesystem: 'vfat'
+          filesystem_opts: '-F 32 -n EFI'
+          part_start: '1MiB'
+          part_end: '1GiB'
+          flags: [ boot, esp ]
+          force: true
+        - name: 'boot'
+          filesystem: 'ext4'
+          filesystem_opts: '-L boot'
+          part_start: '1GiB'
+          part_end: '2GiB'
+          flags: []
+          force: true
+        - name: 'root'
+          filesystem: 'ext4'
+          filesystem_opts: '-L root'
+          part_start: '2GiB'
+          part_end: '100%'
+          flags: []
+          force: true
+  mounts:
+    - path: '/mnt'
+      fstype: auto
+      src: "LABEL=root"
+    - path: '/mnt/boot'
+      fstype: auto
+      src: "LABEL=boot"
+    - path: '/mnt/boot/efi'
+      fstype: auto
+      src: "LABEL=EFI"

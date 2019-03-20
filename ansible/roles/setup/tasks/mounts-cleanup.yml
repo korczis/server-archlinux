@@ -1,0 +1,11 @@
+---
+
+- debug: msg="mounts-cleanup {{ mounts }}"
+
+- block:
+    - name: 'cleanup mounts'
+      include: "./mount-cleanup.yml index={{idx}}"
+      with_items: "{{ mounts }}"
+      loop_control:
+        loop_var: mount
+        index_var: idx

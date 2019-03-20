@@ -1,0 +1,9 @@
+---
+
+- debug: msg='disks-cleanup'
+
+- name: 'cleanup disk'
+  include: "./disk-cleanup.yml disk={{item}} index={{idx}}"
+  with_items: "{{ disks }}"
+  loop_control:
+    index_var: idx

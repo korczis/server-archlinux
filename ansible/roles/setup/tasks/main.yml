@@ -1,0 +1,41 @@
+---
+
+- debug: msg='running setup'
+
+- debug: msg="disks {{setup_layout}}"
+
+- name: 'unmount'
+  include: "./mounts-cleanup.yml mounts={{ setup_layout.mounts | reverse | list }}"
+  tags:
+    - mounts
+    - mounts.cleanup
+
+- name: 'cleanup disks'
+  include: "./disks-cleanup.yml disks={{ setup_layout.disks }}"
+  tags:
+    - disks
+    - disks.cleanup
+
+- name: 'init disks'
+  include: "./disks-init.yml disks={{ setup_layout.disks }}"
+  tags:
+    - disks
+    - disks.init
+
+- name: 'mount'
+  include: "./mounts-init.yml mounts={{ setup_layout.mounts }}"
+  tags:
+    - mounts
+    - mounts.init
+
+- name: 'install base'
+  include: "./install-base.yml"
+  tags:
+    - install
+    - install.base
+
+- name: 'install guest'
+  include: "./install-guest.yml"
+  tags:
+    - install
+    - install.guest

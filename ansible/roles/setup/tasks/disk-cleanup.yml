@@ -1,0 +1,36 @@
+---
+
+- debug: msg="disk-cleanup - {{ disk }}"
+
+#- name: 'read device information (always use unit when probing)'
+#  parted: "device={{ disk.device }} unit=MiB"
+#  register: device_info
+#
+#- name: 'remove all partitions from disk'
+#  parted:
+#    device: "{{ disk }}"
+#    number: "{{ item.num }}"
+#    state: absent
+#  with_items: "{{ device_info.partitions }}"
+
+
+- name: 'read device information (always use unit when probing)'
+  parted: "device={{ disk.device }} unit=MiB"
+  register: disk_info
+
+- block:
+  - name: 'remove all partitions from disk'
+    parted:
+      device: "{{ disk.device }}"
+      number: "{{ part.num }}"
+      state: absent
+    with_items:
+      - "{{ disk_info.partitions }}"
+    loop_control:
+      loop_var: part
+
+- name: 'wipe disk'
+  command: "wipefs -af {{ disk.device }}"
+
+- name: 'probe disk'
+  command: "partprobe {{ disk.device }}"
