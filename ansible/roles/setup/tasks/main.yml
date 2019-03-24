@@ -4,6 +4,13 @@
 
 - debug: msg="disks {{setup_layout}}"
 
+- name: 'install core host prerequisites/packages'
+  include: "./install-host-prerequisites.yml"
+  tags:
+    - install
+    - install.host
+    - install.host.prerequisites
+
 - name: 'unmount'
   include: "./mounts-cleanup.yml mounts={{ setup_layout.mounts | reverse | list }}"
   tags:
@@ -39,3 +46,11 @@
   tags:
     - install
     - install.guest
+
+
+- name: 'reboot machine'
+  reboot:
+    reboot_timeout: 600
+  tags:
+    - install
+    - install.reboot

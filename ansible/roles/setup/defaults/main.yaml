@@ -1,45 +1,69 @@
 ---
 
 setup_layout:
-  core_packages:
-    # - arch-install-scripts
+  core_host_packages:
+    - ansible
+    - git
+    - htop
+    - mc
+    - mosh
+    - tmux
+#    - arch-install-scripts
+#    - dosfstools
+#    - efibootmgr
+#    - efitools
+#    - efivar
+#    - expac
+#    - findutils
+#    - fwupd
+#    - gdisk
+#    - git
+#    - gnupg
+#    - htop
+#    - imagemagick
+#    - jq
+#    - kexec-tools
+#    - linux-tools
+#    - mc
+#    - mkinitcpio
+#    - mosh
+#    - openssh
+#    - openssl
+#    - parted
+#    - refind-efi
+#    - sbsigntools
+#    - sudo
+#    - tmux
+#    - ucode-intel
+#    - udisk2
+#    - vim
+#    - yajl
+
+  core_guest_packages:
     - base
     - base-devel
     - ansible
-    # - dosfstools
+    - arch-install-scripts
+    - archiso
     - efibootmgr
     - efitools
     - efivar
-    # - expac
-    # - findutils
     - fwupd
-    # - gdisk
     - git
-    # - gnupg
-    # - gptfdisk
     - grub
     - htop
-    # - imagemagick
-    # - jq
     # - kexec-tools
-    # - linux-tools
-    # - mc
-    # - mkinitcpio
+    - linux
+    - linux-headers
+    - linux-tools
+    - mc
     - mosh
     - openssh
-    # - openssl
-    # - parted
-    # - python-pip
-    # - python-linux-procfs
-    # - python-pyudev
-    # - refind-efi
-    - sbsigntools
+    - perl
+    - python
+    # - sbsigntools
     - sudo
     - tmux
-    # - ucode-intel
-    # - udisks2
-    - vim
-    # - yajl
 
   disks:
     - device: /dev/sdf
