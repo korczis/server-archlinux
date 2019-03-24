@@ -29,7 +29,7 @@
   mount:
     path: '/mnt/boot'
     src: '/dev/md2'
-    fstype: ext4
+    fstype: auto
     state: mounted
 
 # ---
@@ -46,7 +46,7 @@
   mount:
     path: '/mnt/boot/efi'
     src: '/dev/md1'
-    fstype: vfat
+    fstype: auto
     state: mounted
 
 # ---
@@ -63,7 +63,7 @@
   mount:
     path: '/mnt/efi'
     src: '/dev/md1'
-    fstype: vfat
+    fstype: auto
     state: mounted
 
 # ---
