@@ -90,7 +90,7 @@
     - pacaur.pacaur
 
 - name: 'install pacaur'
-  shell: 'sudo pacman --noconfirm -U pacaur-4.8.4-1-any.pkg.tar.xz'
+  shell: 'sudo pacman --noconfirm -U pacaur-4.8.5-14.8.5-1-any.pkg.tar.xz'
   args:
     chdir: '~/tmp'
     creates: '/usr/bin/pacaur'
