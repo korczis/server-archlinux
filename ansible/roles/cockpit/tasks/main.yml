@@ -1,4 +1,4 @@
-# ---
+## ---
 
 - name: 'install cockpit prerequisites'
   package:
@@ -12,41 +12,22 @@
 
 - name: 'import required gpg keys'
   become_user: ansible
-  shell: 'gpg --recv-keys --yes 7E83610126DCC2E8'
+  shell: "gpg --recv-keys --yes {{ item }}"
+  with_items:
+    - '7E83610126DCC2E8'
   tags:
     - cockpit
 
 # ---
 
-- name: 'install "systemtap" using pacaur'
-  become_user: ansible
-  aur:
-    use: pacaur
-    name: systemtap-git
-  tags:
-    - cockpit
-
-# ---
-
-- name: 'install "pcp" using pacaur'
-  become_user: ansible
-  aur:
-    use: pacaur
-    name: pcp
-  tags:
-    - cockpit
-
-
-# ---
-
-#- name: 'install "storaged" using pacaur'
+#- name: 'install storaged'
 #  become_user: ansible
 #  aur:
 #    use: pacaur
-#    name: tpacu
+#    name: storaged
 #  tags:
 #    - cockpit
-#
+
 #- name: 'ensure "storaged" service is up and running'
 #  service:
 #    name: storaged
@@ -105,15 +86,25 @@
 
 # ---
 
-# REFERENCES
-#
-# - https://aur.archlinux.org/packages/cockpit-minimal/
-# - https://aur.archlinux.org/packages/cockpit-git/
+## REFERENCES
+##
+## - https://aur.archlinux.org/packages/cockpit-minimal/
+## - https://aur.archlinux.org/packages/cockpit-git/
 
-- name: 'copy /etc/pam.d/sshd -> /etc/pam.d/cockpit'
-  command: 'cp /etc/pam.d/sshd /etc/pam.d/cockpit'
+- name: 'create symlink'
+  file:
+    src: '/etc/pam.d/sshd'
+    dest: '/etc/pam.d/cockpit'
+    state: 'link'
   tags:
     - cockpit
+
+# ---
+
+#- name: 'copy /etc/pam.d/sshd -> /etc/pam.d/cockpit'
+#  command: 'cp /etc/pam.d/sshd /etc/pam.d/cockpit'
+#  tags:
+#    - cockpit
 
 # ---
 
