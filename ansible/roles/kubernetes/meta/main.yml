@@ -17,12 +17,14 @@ galaxy_info:
   # (usually master) will be used.
 
   platforms:
-    - name: Fedora
+    - name: ArchLinux
       versions:
-        - 29
+        - 5
 
   galaxy_tags: []
 
 dependencies:
+  - core
   - docker
+  - docker-registry
 
