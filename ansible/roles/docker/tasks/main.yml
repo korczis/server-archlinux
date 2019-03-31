@@ -4,35 +4,23 @@
   group:
     name: docker
     state: present
-  tags:
-    - docker
-    - docker.group
 
 - name: install docker
   package:
     name: docker
     state: present
-  tags:
-    - docker
-    - docker.bin
 
 - name: 'ensure docker service is started and enabled'
   service:
     name: docker
     state: restarted
     enabled: true
-  tags:
-    - docker
-    - docker.service
 
 - name: "chown {{ docker_sock_path }}"
   file:
     path: "{{ docker_sock_path }}"
     owner: root
     group: docker
-  tags:
-    - docker
-    - docker.socket
 
 - name: 'create data directory for docker'
   file:
@@ -42,7 +30,3 @@
     group: docker
     mode: 0775
     recurse: yes
-  tags:
-    - docker
-    - docker.dir
-
