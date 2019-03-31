@@ -1,10 +1,45 @@
 # ---
 
 - name: 'install core packages'
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ core_packages }}"
-  tags:
-    - core
+  shell: "pacman -Sy --noconfirm {{ core_packages | join(' ') }}"
 
+## ---
+#
+#- name: 'init locale'
+#  include: "./locale.yml"
+#
+## ---
+#
+#- name: 'copy /etc/sudoers'
+#  template:
+#    src: etc/sudoers
+#    dest: /etc/sudoers
+#    owner: root
+#    group: root
+#    mode: '0440'
+#    validate: '/usr/sbin/visudo -cf %s'
+#
+## ---
+#
+#- name: 'make sure "wheel" group exists'
+#  group:
+#    name: wheel
+#    state: present
+#
+## ---
+#
+#- name: 'create user "ansible"'
+#  user:
+#    name: ansible
+#    state: present
+#    groups:
+#      - wheel
+#
+## ---
+#
+#- name: 'create tmp directory'
+#  become_user: ansible
+#  file:
+#    path: ~/tmp
+#    state: directory
+#
