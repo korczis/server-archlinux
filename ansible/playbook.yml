@@ -1,0 +1,107 @@
+- hosts: all
+  become: yes
+  gather_facts: yes
+  remote_user: root
+  debugger: never
+
+  vars:
+    mounts: &mounts
+      - path: /mnt
+        src: /dev/vg.main/root
+        fstype: auto
+      - path: /mnt/boot
+        src: /dev/md2
+        fstype: ext4
+      - path: /mnt/boot/efi
+        src: /dev/md1
+        fstype: vfat
+
+    parts: &parts
+      - &part_efi
+        name: efi
+        part_start: 1MiB
+        part_end: 1024MiB
+        fstype: vfat
+        label: gpt
+      - &part_boot
+        name: boot
+        part_start: 1024MiB
+        part_end: 2048MiB
+        fstype: ext4
+        label: gpt
+      - &part_main
+        name: main
+        flags: [ lvm ]
+        part_start: 2048MiB
+        part_end: 100%
+        fstype: ext4
+        label: gpt
+
+    disks: &disks
+      - dev: /dev/sda
+        label: gpt
+        name: sda
+        parts: *parts
+      - dev: /dev/sdb
+        label: gpt
+        name: sdb
+        parts: *parts
+      - dev: /dev/sdc
+        label: gpt
+        name: sdc
+        parts: *parts
+      - dev: /dev/sdd
+        label: gpt
+        name: sdd
+        parts: *parts
+
+    arrays: &arrays
+      - name: md1
+        dev: /dev/md1
+        mountpoint: /mnt/md1
+        devices:
+          - /dev/sda1
+          - /dev/sdb1
+          - /dev/sdc1
+          - /dev/sdd1
+      - name: md2
+        dev: /dev/md2
+        mountpoint: /mnt/md2
+        devices:
+          - /dev/sda2
+          - /dev/sdb2
+          - /dev/sdc2
+          - /dev/sdd2
+      - name: md3
+        dev: /dev/md3
+        mountpoint: /mnt/md3
+        devices:
+          - /dev/sda3
+          - /dev/sdb3
+          - /dev/sdc3
+          - /dev/sdd3
+
+    lvm: &lvm
+      - vg: 'vg.main'
+        dev: '/dev/vg.main/root'
+        lv: root
+        size: +100%FREE
+        fstype: ext4
+        resizefs: true
+
+  roles:
+    - name: core
+      tags:
+        - core
+    - name: fs
+      disks: *disks
+      mounts: *mounts
+      arrays: *arrays
+      lvm: *lvm
+      tags:
+        - lvm
+    - name: pacstrap
+      tags:
+        - pacstrap
+
+

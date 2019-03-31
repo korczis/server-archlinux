@@ -4,13 +4,5 @@
   remote_user: root
   debugger: never # always | never | on_failed | on_unreachable | on_skipped
   roles:
-     - setup
-#     - guest
-#    # ---
-#    - fail2ban
-#    - users
-#    - pacaur
-#    - docker
-#    - docker-registry
-#    # - kubernetes
-#    - cockpit
+    - core
+  #  - adhoc

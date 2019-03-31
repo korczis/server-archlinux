@@ -4,4 +4,12 @@
   remote_user: root
   debugger: never # always | never | on_failed | on_unreachable | on_skipped
   roles:
-     - guest
+    - core
+    - fail2ban
+    - docker
+    - users
+    # - kernel
+    - java
+    - pacaur
+    - cockpit
+    - kubernetes
