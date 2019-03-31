@@ -1,0 +1,6 @@
+---
+
+- debug: msg='install host prerequisites'
+
+- name: 'install host prerequisites'
+  shell: "pacman -Sy --noconfirm {{ setup_layout.core_host_packages | join(' ') }}"

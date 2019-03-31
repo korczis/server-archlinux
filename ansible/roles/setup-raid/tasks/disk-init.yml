@@ -1,0 +1,11 @@
+---
+
+- debug: msg="disk-init - {{ disk }}"
+
+- block:
+  - name: "create partitions - {{ disk }}"
+    include: "./part-init.yml index={{idx}}"
+    loop: "{{ disk.parts }}"
+    loop_control:
+      loop_var: part
+      index_var: idx

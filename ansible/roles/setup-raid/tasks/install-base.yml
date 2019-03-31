@@ -1,0 +1,21 @@
+---
+
+- debug: msg="install-base"
+
+
+- name: 'copy local pacman.conf'
+  template:
+    src: 'pacman.conf'
+    dest: '~/pacman.conf'
+
+- name: 'pacman-key --init'
+  shell: 'pacman-key --init'
+
+- name: 'pacman-key --populate archlinux'
+  shell: 'pacman-key --populate archlinux'
+
+- name: 'pacstrap /mnt'
+  shell: "yes all | pacstrap -C ~/pacman.conf /mnt {{ setup_layout.core_guest_packages | join(' ') }} --noconfirm"
+
+- name: 'populates base system fstab with configured storage devices'
+  shell: "/usr/bin/genfstab -L -p /mnt > /mnt/etc/fstab"

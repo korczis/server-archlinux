@@ -1,0 +1,20 @@
+---
+
+- debug: msg='disks-cleanup'
+
+- name: 'cleanup disk'
+  include: "./disk-cleanup.yml disk={{item}} index={{idx}}"
+  with_items: "{{ disks }}"
+  loop_control:
+    index_var: idx
+
+#- name: "create partition - {{ part }}"
+#  parted:
+#    device: "{{ disk.device }}"
+#    number: "{{ idx + 1 }}"
+#    state: 'present'
+#    part_start: "{{ part.part_start }}"
+#    part_end: "{{ part.part_end }}"
+#    label: "{{ disk.label }}"
+#    name: "{{ part.name }}"
+#    flags: "{{ part.flags }}"

@@ -1,0 +1,23 @@
+---
+
+- debug: msg="disk-part-init - {{ disk }} - {{ idx }} - {{ part }}"
+
+- block:
+  - name: "create partition - {{ part }}"
+    parted:
+      device: "{{ disk.device }}"
+      number: "{{ idx + 1 }}"
+      state: 'present'
+      part_start: "{{ part.part_start }}"
+      part_end: "{{ part.part_end }}"
+      label: "{{ disk.label }}"
+      name: "{{ part.name }}"
+      flags: "{{ part.flags }}"
+
+- block:
+  - name: "create partition filesystem - {{ part }}"
+    filesystem:
+      fstype: "{{ part.filesystem }}"
+      force: "{{ part.force }}"
+      dev:  "{{ disk.device }}{{ idx + 1 }}"
+      opts: "{{ part.filesystem_opts }}"

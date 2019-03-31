@@ -1,0 +1,6 @@
+---
+
+- debug: msg='array-cleanup'
+
+- name: 'remove array'
+  shell: "mdadm --stop {{ array.name }}"

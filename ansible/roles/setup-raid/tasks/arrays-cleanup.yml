@@ -1,0 +1,17 @@
+---
+
+- debug: msg='arrays-cleanup'
+
+- name: copy /etc/mdadm.conf
+  template:
+    src: etc/mdadm.conf
+    dest: /etc/mdadm.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: 'cleanup array'
+  include: "./array-cleanup.yml array={{item}} index={{idx}}"
+  with_items: "{{ arrays }}"
+  loop_control:
+    index_var: idx
