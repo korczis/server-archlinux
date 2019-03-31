@@ -1,14 +1,9 @@
----
+# ---
 
-- name: 'create user "ansible"'
-  user:
-    name: ansible
+- name: 'ensure group "docker" exists'
+  group:
+    name: docker
     state: present
-    groups:
-      - wheel
-  tags:
-    - users
-    - users.ansible
 
 # ---
 
@@ -22,9 +17,6 @@
     ssh_key_bits: 4096
     ssh_key_file: .ssh/id_rsa
   with_items: "{{ github_users }}"
-  tags:
-      - users
-      - users.import
 
 # ---
 
@@ -34,6 +26,3 @@
     state: present
     key: "https://github.com/{{ item }}.keys"
   with_items: "{{ github_users }}"
-  tags:
-      - users
-      - users.authorize
