@@ -1,0 +1,21 @@
+---
+
+- debug: msg='locale'
+
+- block:
+  - name: 'copy local locale.gen'
+    template:
+      src: 'etc/locale.gen'
+      dest: '/etc/locale.gen'
+
+- block:
+  - name: 'set locale'
+    shell: 'localectl set-locale LANG=en_US.UTF-8'
+
+- block:
+  - name: 'generate locale'
+    shell: 'locale-gen'
+
+- block:
+  - name: 'display locale settings'
+    shell: 'locale'

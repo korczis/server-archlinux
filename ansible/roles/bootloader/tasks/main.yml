@@ -1,0 +1,61 @@
+# ---
+
+- name: 'bootloader'
+  debug: msg="{{ bootloader }}"
+
+- name: 'copy /etc/mkinitcpio.conf'
+  template:
+    src: 'mnt/etc/default/grub'
+    dest: '/mnt/etc/default/grub'
+
+#- name: 'copy /etc/mkinitcpio.conf'
+#  template:
+#    src: 'mnt/etc/mkinitcpio.conf'
+#    dest: '/etc/mkinitcpio.conf'
+
+- name: 'copy /mnt/etc/mkinitcpio.conf'
+  template:
+    src: 'mnt/etc/mkinitcpio.conf'
+    dest: '/mnt/etc/mkinitcpio.conf'
+
+- name: 'create directory /mnt/hostlvm'
+  file:
+    path: '/mnt/hostlvm'
+    state: directory
+
+- name: 'mount /run/lvm as /mnt/hostlvm'
+  mount:
+    path: '/mnt/hostlvm'
+    src: '/run/lvm'
+    fstype: 'none'
+    opts: 'bind'
+    state: 'mounted'
+
+#- name: 'create directory /root/tmp/bootloader'
+#  file:
+#    path: '/mnt/root/tmp/bootloader'
+#    state: directory
+#
+#- name: 'copy /root/tmp/bootloader/grub-install.sh'
+#  template:
+#    src: 'mnt/root/tmp/bootloader/grub-install.sh'
+#    dest: '/mnt/root/tmp/bootloader/grub-install.sh'
+#    mode: 0755
+#
+#- name: 'install grub'
+#  shell: 'arch-chroot /mnt /root/tmp/bootloader/grub-install.sh'
+#
+#- name: 'run mkinitcpio'
+#  shell: 'mkinitcpio -p linux'
+
+#- name: 'install grub'
+#  include: "./install-grub.yml index={{ idx }} device={{ item }}"
+#  with_items: "{{ bootloader.grub }}"
+#  loop_control:
+#    index_var: idx
+
+#- name: 'install efibootmgr'
+#  include: "./install-efibootmgr.yml index={{ idx }} device={{ item }}"
+#  with_items: "{{ bootloader.efibootmgr }}"
+#  loop_control:
+#    index_var: idx

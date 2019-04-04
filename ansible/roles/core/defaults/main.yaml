@@ -1,6 +1,7 @@
 ---
 
 core_packages:
+  - aria2
   - git
   - htop
   - mc

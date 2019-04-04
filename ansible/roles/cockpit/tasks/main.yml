@@ -20,24 +20,6 @@
 
 # ---
 
-#- name: 'install storaged'
-#  become_user: ansible
-#  aur:
-#    use: pacaur
-#    name: storaged
-#  tags:
-#    - cockpit
-
-#- name: 'ensure "storaged" service is up and running'
-#  service:
-#    name: storaged
-#    state: restarted
-#    enabled: true
-#  tags:
-#      - cockpit
-
-# ---
-
 - name: 'install "tuned" using pacaur'
   become_user: ansible
   aur:
@@ -98,13 +80,6 @@
     state: 'link'
   tags:
     - cockpit
-
-# ---
-
-#- name: 'copy /etc/pam.d/sshd -> /etc/pam.d/cockpit'
-#  command: 'cp /etc/pam.d/sshd /etc/pam.d/cockpit'
-#  tags:
-#    - cockpit
 
 # ---
 

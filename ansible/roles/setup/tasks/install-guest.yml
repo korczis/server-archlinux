@@ -2,11 +2,13 @@
 
 - debug: msg="install-guest"
 
+# See https://wiki.archlinux.org/index.php/GRUB#LVM
+
 - name: 'run mkinitcpio'
   shell: 'arch-chroot /mnt mkinitcpio -p linux'
 
 - name: 'run grub-install'
-  shell: 'arch-chroot /mnt grub-install --recheck --target=x86_64-efi --bootloader-id=BOOT --debug --modules="part_gpt part_msdos" --efi-directory=/boot/efi --removable'
+  shell: 'arch-chroot /mnt grub-install --recheck --removable --target=x86_64-efi --bootloader-id=BOOT --debug --efi-directory=/boot/efi --modules="part_gpt part_msdos"'
 
 - name: 'run grub-mkconfig'
   shell: 'arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg'
@@ -16,7 +18,7 @@
   shell: 'arch-chroot /mnt systemctl enable dhcpcd'
 
 - name: 'enable sshd'
-  shell: 'arch-chroot /mnt systemctl enable sshd'
+  shell: 'arch-chroot /mnt systemctl enable dhcpcd'
 
 ##  efibootmgr --create --disk /dev/sde --part 1 --loader /EFI/BOOT/BOOTX64.EFI --label "GRUB" --verbose
 

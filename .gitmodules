@@ -13,3 +13,6 @@
 [submodule "external/arch-boxes"]
 	path = external/arch-boxes
 	url = https://github.com/korczis/arch-boxes.git
+[submodule "external/syslinux"]
+	path = external/syslinux
+	url = https://github.com/geneC/syslinux.git

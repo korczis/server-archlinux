@@ -1,0 +1,60 @@
+# ---
+
+- name: 'md-init'
+  debug: msg="init {{ arrays }}"
+
+- name: 'create md arrays'
+  include_role:
+    name: ansible-mdadm
+  vars:
+    mdadm_arrays:
+      - name: 'md3'
+        devices:
+          - "{{ disk1_dev }}3"
+          - "{{ disk2_dev }}3"
+          - "{{ disk3_dev }}3"
+          - "{{ disk4_dev }}3"
+        filesystem: 'ext4'
+        filesystem_opts: '-f -L root'
+        level: '10'
+        # mountpoint: '/mnt'
+        state: 'present'
+        # force: true
+
+      - name: 'md2'
+        devices:
+          - "{{ disk1_dev }}2"
+          - "{{ disk2_dev }}2"
+          - "{{ disk3_dev }}2"
+          - "{{ disk4_dev }}2"
+        filesystem: 'ext4'
+        filesystem_opts: '-f -L boot'
+        level: '1'
+        # mountpoint: '/mnt/boot'
+        state: 'present'
+        # force: true
+
+      - name: 'md1'
+        devices:
+          - "{{ disk1_dev }}1"
+          - "{{ disk2_dev }}1"
+          - "{{ disk3_dev }}1"
+          - "{{ disk4_dev }}1"
+        filesystem: 'vfat'
+        filesystem_opts: '-F32 -n efi'
+        level: '1'
+        # mountpoint: '/mnt/boot/efi'
+        state: 'present'
+        # force: true
+
+- name: 'format /boot'
+  filesystem:
+    fstype: 'ext4'
+    dev: '/dev/md2'
+    force: yes
+
+- name: 'format /boot/efi'
+  filesystem:
+    fstype: 'vfat'
+    dev: '/dev/md1'
+    force: yes

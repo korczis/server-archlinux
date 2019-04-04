@@ -1,0 +1,39 @@
+# ---
+
+# Adhoc helper (testing only)
+- name: 'adhoc commands'
+  include: "./adhoc.yml"
+
+# ---
+
+# Print disk info (debug only)
+- name: 'print disk info'
+  command: "fdisk -l {{ device.dev }}"
+  with_items: "{{ fs_layout.devices }}"
+  loop_control:
+    loop_var: device
+  tags:
+    - never
+    - debug
+
+# ---
+
+# Install required packages
+- name: 'install prerequisites'
+  include: "./install-prerequisites.yml"
+
+# Load required kernel modules
+- name: 'bootstrap'
+  include: "./bootstrap.yml"
+
+# Initialize filesystem
+- name: 'initialize filesystem'
+  include: "./fs.yml"
+
+# Install system
+- name: 'install system'
+  include: "./install.yml"
+
+# Install bootloader
+- name: 'install bootloader'
+  include: "./bootloader.yml"

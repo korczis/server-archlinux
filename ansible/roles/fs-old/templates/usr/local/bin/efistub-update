@@ -1,0 +1,6 @@
+#! /usr/bin/env sh
+
+cp -af /boot/vmlinuz-linux esp/EFI/arch/
+cp -af /boot/initramfs-linux.img esp/EFI/arch/
+cp -af /boot/initramfs-linux-fallback.img esp/EFI/arch/
+

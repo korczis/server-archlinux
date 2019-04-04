@@ -1,0 +1,37 @@
+# ---
+
+- name: 'install java packages'
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ java_packages }}"
+
+# ---
+#
+- name: 'clone jre'
+  become_user: ansible
+  git:
+    repo: 'https://aur.archlinux.org/jre.git'
+    dest: '~/tmp/jre'
+    force: true
+
+- name: 'build and install jre'
+  become_user: ansible
+  shell: 'makepkg -si --noconfirm'
+  args:
+    chdir: '~/tmp/jre'
+
+# ---
+
+- name: 'clone jdk'
+  become_user: ansible
+  git:
+    repo: 'https://aur.archlinux.org/jdk.git'
+    dest: '~/tmp/jdk'
+    force: true
+
+- name: 'build and install jdk'
+  become_user: ansible
+  shell: 'makepkg -si --noconfirm'
+  args:
+    chdir: '~/tmp/jdk'

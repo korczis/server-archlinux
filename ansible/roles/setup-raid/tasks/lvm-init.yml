@@ -33,6 +33,7 @@
     fstype: ext4
     force: yes
     dev: '/dev/vg.main/root'
+    opts: '-L root'
 
 - name: 'mount /dev/vg.main/root - /mnt'
   mount:

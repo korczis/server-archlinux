@@ -9,7 +9,7 @@
     mdadm_arrays:
       - name: 'md3'
         devices:
-          - '/dev/sda3'
+          - '/dev/sde3'
           - '/dev/sdb3'
           - '/dev/sdc3'
           - '/dev/sdd3'
@@ -22,7 +22,7 @@
 
       - name: 'md2'
         devices:
-          - '/dev/sda2'
+          - '/dev/sde2'
           - '/dev/sdb2'
           - '/dev/sdc2'
           - '/dev/sdd2'
@@ -35,7 +35,7 @@
 
       - name: 'md1'
         devices:
-          - '/dev/sda1'
+          - '/dev/sde1'
           - '/dev/sdb1'
           - '/dev/sdc1'
           - '/dev/sdd1'
@@ -59,4 +59,4 @@
     dev: '/dev/md1'
 
 - name: 'probe disks'
-  shell: "partprobe /dev/sd{a,b,c,d}"
+  shell: "partprobe /dev/sd{e,b,c,d}"

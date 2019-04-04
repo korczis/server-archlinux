@@ -1,0 +1,8 @@
+label: dos
+label-id: 0x1b23030f
+device: /dev/sdd
+unit: sectors
+
+/dev/sdd1 : start=        2048, size=      522240, type=83
+/dev/sdd2 : start=      524288, size=     1048576, type=83
+/dev/sdd3 : start=     1572864, size=  1951950848, type=83

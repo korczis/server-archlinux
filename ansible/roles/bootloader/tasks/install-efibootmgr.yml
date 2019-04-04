@@ -1,0 +1,4 @@
+# ---
+
+- name: 'install efibootmgr'
+  shell: 'arch-chroot /mnt efibootmgr --create --disk {{ device.dev }} --loader /EFI/BOOT/BOOTX64.EFI --label "GRUB" --verbose'

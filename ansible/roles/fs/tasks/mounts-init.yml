@@ -1,0 +1,11 @@
+---
+
+- debug: msg="mounts-init {{ mounts }}"
+
+- block:
+  - name: 'init mounts'
+    include: "./mount-init.yml index={{idx}}"
+    with_items: "{{ mounts }}"
+    loop_control:
+      loop_var: mount
+      index_var: idx

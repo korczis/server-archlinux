@@ -5,9 +5,9 @@
   debugger: never # always | never | on_failed | on_unreachable | on_skipped
   roles:
     - core
-    # - setup-raid
-#    - pacman
-#    - pacstrap
+    - setup-raid
+    - pacman
+    - pacstrap
 #     - setup
 #     - guest
 #    # ---

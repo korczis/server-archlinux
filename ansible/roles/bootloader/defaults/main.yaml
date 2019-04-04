@@ -1,0 +1,29 @@
+---
+
+core_packages:
+  - git
+  - htop
+  - mc
+  - mosh
+  - tmux
+  - vim
+
+#  - findutils
+#  - git
+#  - htop
+#  - mc
+#  - mosh
+#  - pkgconf
+#  - sudo
+#  - tmux
+#  - vim
+
+authorized_users:
+  - korczis
+
+#  - akloboucnik
+#  - fluke777
+#  - korczis
+#  - liskin
+#  - tchabada
+#  - zh1

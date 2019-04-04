@@ -1,0 +1,21 @@
+# ---
+
+- name: 'install pacstrap packages'
+  shell: "/usr/bin/pacstrap /mnt {{ pacstrap_packages | join(' ') }}"
+
+- name: 'copy default /etc/fstab'
+  template:
+    src: 'etc/fstab'
+    dest: '/mnt/etc/fstab'
+
+- name: 'populates base system /etc/fstab'
+  shell: '/usr/bin/genfstab -U -p /mnt >> /mnt/etc/fstab'
+
+
+- name: 'copy default /etc/mdadm.conf'
+  template:
+    src: 'etc/mdadm.conf'
+    dest: '/mnt/etc/mdadm.conf'
+
+- name: 'populates base system /etc/mdadm.conf'
+  shell: '/usr/bin/mdadm -D --scan >> /mnt/etc/mdadm.conf'

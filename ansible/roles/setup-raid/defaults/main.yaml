@@ -1,0 +1,159 @@
+---
+
+setup_layout:
+  core_host_packages:
+    - parted
+
+  core_host_packages_old: []
+
+  core_guest_packages:
+    - base
+    - base-devel
+    - ansible
+    - arch-install-scripts
+    - archiso
+    - efibootmgr
+    - efitools
+    - efivar
+    - fwupd
+    - git
+    - grub
+    - htop
+    # - kexec-tools
+    - linux
+    - linux-headers
+    - linux-tools
+    - mc
+    - mosh
+    - openssh
+    - perl
+    - python
+    # - sbsigntools
+    - sudo
+    - tmux
+
+  disks:
+    - device: '/dev/sda'
+      label: 'gpt'
+      parts:
+        - name: 'EFI'
+          filesystem: 'vfat'
+          filesystem_opts: '-F 32 -n EFI'
+          part_start: '1MiB'
+          part_end: '1GiB'
+          flags: [ boot, esp ]
+          force: true
+        - name: 'boot'
+          filesystem: 'ext4'
+          filesystem_opts: '-L boot'
+          part_start: '1GiB'
+          part_end: '2GiB'
+          flags: []
+          force: true
+        - name: 'root'
+          filesystem: 'ext4'
+          filesystem_opts: '-L root'
+          part_start: '2GiB'
+          part_end: '100%'
+          flags: []
+          force: true
+
+    - device: '/dev/sdb'
+      label: 'gpt'
+      parts:
+        - name: 'EFI'
+          filesystem: 'vfat'
+          filesystem_opts: '-F 32 -n EFI'
+          part_start: '1MiB'
+          part_end: '1GiB'
+          flags: [ boot, esp ]
+          force: true
+        - name: 'boot'
+          filesystem: 'ext4'
+          filesystem_opts: '-L boot'
+          part_start: '1GiB'
+          part_end: '2GiB'
+          flags: []
+          force: true
+        - name: 'root'
+          filesystem: 'ext4'
+          filesystem_opts: '-L root'
+          part_start: '2GiB'
+          part_end: '100%'
+          flags: []
+          force: true
+
+    - device: '/dev/sdc'
+      label: 'gpt'
+      parts:
+        - name: 'EFI'
+          filesystem: 'vfat'
+          filesystem_opts: '-F 32 -n EFI'
+          part_start: '1MiB'
+          part_end: '1GiB'
+          flags: [ boot, esp ]
+          force: true
+        - name: 'boot'
+          filesystem: 'ext4'
+          filesystem_opts: '-L boot'
+          part_start: '1GiB'
+          part_end: '2GiB'
+          flags: []
+          force: true
+        - name: 'root'
+          filesystem: 'ext4'
+          filesystem_opts: '-L root'
+          part_start: '2GiB'
+          part_end: '100%'
+          flags: []
+          force: true
+
+    - device: '/dev/sdd'
+      label: 'gpt'
+      parts:
+        - name: 'EFI'
+          filesystem: 'vfat'
+          filesystem_opts: '-F 32 -n EFI'
+          part_start: '1MiB'
+          part_end: '1GiB'
+          flags: [ boot, esp ]
+          force: true
+        - name: 'boot'
+          filesystem: 'ext4'
+          filesystem_opts: '-L boot'
+          part_start: '1GiB'
+          part_end: '2GiB'
+          flags: [ lvm ]
+          force: true
+        - name: 'root'
+          filesystem: 'ext4'
+          filesystem_opts: '-L root'
+          part_start: '2GiB'
+          part_end: '100%'
+          flags: [ lvm ]
+          force: true
+
+  arrays:
+    - name: md1
+    - name: md2
+    - name: md3
+
+  mounts:
+    - path: '/mnt'
+      fstype: 'auto'
+      src: '/dev/vg.main/root'
+    - path: '/mnt/boot'
+      fstype: 'auto'
+      src: '/dev/md2'
+    - path: '/mnt/boot/efi'
+      fstype: 'auto'
+      src: '/dev/md1'
+#    - path: '/mnt'
+#      fstype: auto
+#      src: "LABEL=root"
+#    - path: '/mnt/boot'
+#      fstype: auto
+#      src: "LABEL=boot"
+#    - path: '/mnt/boot/efi'
+#      fstype: auto
+#      src: "LABEL=EFI"

@@ -1,0 +1,27 @@
+---
+
+pacstrap_packages:
+  - base
+  - base-devel
+  - ansible
+  - arch-install-scripts
+  - archiso
+  - efibootmgr
+  - efitools
+  - efivar
+  - fwupd
+  - git
+  - grub
+  - htop
+  # - kexec-tools
+  - linux
+  - linux-headers
+  - linux-tools
+  - mc
+  - mosh
+  - openssh
+  - perl
+  - python
+  # - sbsigntools
+  - sudo
+  - tmux

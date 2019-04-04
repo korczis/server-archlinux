@@ -1,8 +1,35 @@
 ---
 
+pacaur_gpg_keys:
+  - 7E83610126DCC2E8
+  - 1EB2638FF56C0C53
+
 pacaur_packages:
+  - avahi
+  - boost
+  - cairo
+  - cpio
+  - elfutils
   - expac
   - gnupg
   - jq
-  - yajl
+  - libvirt
+  - libvirt-python2
+  - nss
+  - packagekit
+  - pam
+  - ppp
   - perl
+  - procps-ng
+  - python-pip
+  - python-linux-procfs
+  - python-pyudev
+  - python-setuptools
+  - python2
+  - python2-setuptools
+  - texlive-core
+  - texlive-most
+  - texlive-lang
+  - texlive-langextra
+  - xmlto
+  - yajl

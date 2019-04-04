@@ -1,0 +1,16 @@
+# ---
+
+- name: "remove a logical volume 'root'"
+  lvol:
+    vg: vg.main
+    lv: root
+    state: absent
+    force: yes
+
+- name: "remove volume group '/dev/md3' - ansible way"
+  lvg:
+    vg: vg.main
+    pvs: /dev/md3
+    # pv_options: '-ffy'
+    state: absent
+    force: yes

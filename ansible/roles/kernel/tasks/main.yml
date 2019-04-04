@@ -1,0 +1,83 @@
+# ---
+
+- name: 'install kernel packages'
+  package:
+    name: "{{ item }}"
+    state: 'present'
+  with_items: "{{ kernel_packages }}"
+
+# "CONFIG_DEBUG_INFO is disabled on default.
+# You need to recompile", "the kernel with CONFIG_DEBUG_INFO enabled."
+
+#    Reduce debugging information (DEBUG_INFO_REDUCED) [N/y/?] (NEW)
+#    Produce split debuginfo in .dwo files (DEBUG_INFO_SPLIT) [N/y/?] (NEW)
+#    Generate dwarf4 debuginfo (DEBUG_INFO_DWARF4) [N/y/?] (NEW)
+#    Provide GDB scripts for kernel debugging (GDB_SCRIPTS) [N/y/?] (NEW)
+#    Enable __must_check logic (ENABLE_MUST_CHECK) [N/y/?] n
+#    Warn for stack frames larger than (needs gcc 4.4) (FRAME_WARN) [2048] 2048
+#    Strip assembler-generated symbols during link (STRIP_ASM_SYMS) [Y/n/?] y
+#    Generate readable assembler code (READABLE_ASM) [N/y/?] n
+#    Enable unused/obsolete exported symbols (UNUSED_SYMBOLS) [Y/n/?] y
+#    Track page owner (PAGE_OWNER) [N/y/?] n
+#    Debug Filesystem (DEBUG_FS) [Y/?] y
+#    Run 'make headers_check' when building vmlinux (HEADERS_CHECK) [N/y/?] n
+#    Enable full Section mismatch analysis (DEBUG_SECTION_MISMATCH) [N/y/?] n
+#    Make section mismatch errors non-fatal (SECTION_MISMATCH_WARN_ONLY) [Y/n/?] y
+#    Compile-time stack metadata validation (STACK_VALIDATION) [Y/?] y
+#    Force weak per-cpu definitions (DEBUG_FORCE_WEAK_PER_CPU) [N/y/?] n
+
+#CONFIG_DEBUG_INFO_REDUCED=n
+#CONFIG_DEBUG_INFO_SPLIT=n
+#CONFIG_DEBUG_INFO_DWARF4=n
+#CONFIG_GDB_SCRIPTS=n
+#CONFIG_ENABLE_MUST_CHECK=n
+#CONFIG_FRAME_WARN=2048
+#CONFIG_STRIP_ASM_SYMS=y
+#CONFIG_READABLE_ASM=n
+#CONFIG_UNUSED_SYMBOLS=y
+#CONFIG_PAGE_OWNER=n
+#CONFIG_DEBUG_FS=y
+#CONFIG_HEADERS_CHECK=y
+#CONFIG_DEBUG_SECTION_MISMATCH=y
+#CONFIG_SECTION_MISMATCH_WARN_ONLY=y
+#CONFIG_STACK_VALIDATION=y
+#CONFIG_DEBUG_FORCE_WEAK_PER_CPU=n
+
+- name: 'create ~/kernelbuild directory'
+  become_user: 'ansible'
+  file:
+    path: '~/kernelbuild'
+    state: 'directory'
+
+- name: 'fetch kernel sources'
+  become_user: 'ansible'
+  get_url:
+    url: 'https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.0.1.tar.xz'
+    dest: '~/tmp/linux-5.0.1.tar.xz'
+
+- name: 'unpack kernel sources'
+  become_user: 'ansible'
+  shell: 'tar -xvJf ~/tmp/linux-5.0.1.tar.xz'
+  args:
+    chdir: '~/tmp'
+    creates: '~/tmp/linux-5.0.1'
+
+- name: 'prepare build'
+  become_user: 'ansible'
+  shell: 'make clean && make mrproper'
+  args:
+    chdir: '~/tmp/linux-5.0.1'
+
+- name: 'create .config from running system'
+  become_user: 'ansible'
+  shell: 'zcat /proc/config.gz > .config'
+  args:
+    chdir: '~/tmp/linux-5.0.1'
+
+- name: 'create .config from running system'
+  become_user: 'ansible'
+  template:
+    src: /home/vagrant/stunnelSimAnsPractice/roles/ns16/templates/stunnel.j2
+    dest: '~/tmp/linux-5.0.1/.config.local'
+  args:
+    chdir: '~/tmp/linux-5.0.1'

@@ -1,0 +1,15 @@
+# ---
+
+- name: 'parts-init'
+  debug: msg="init parts - {{ disk }}"
+
+
+- name: 'init parts'
+  include: "./part-init.yml index={{ idx }}"
+  with_items: "{{ disk.parts }}"
+  loop_control:
+    loop_var: part
+    index_var: idx
+
+- name: 'probe disk'
+  shell: "partprobe {{ disk.dev }}"

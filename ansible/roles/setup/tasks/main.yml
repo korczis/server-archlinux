@@ -48,9 +48,9 @@
     - install.guest
 
 
-- name: 'reboot machine'
-  reboot:
-    reboot_timeout: 600
-  tags:
-    - install
-    - install.reboot
+#- name: 'reboot machine'
+#  reboot:
+#    reboot_timeout: 900
+#  tags:
+#    - install
+#    - install.reboot

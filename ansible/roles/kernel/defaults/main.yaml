@@ -1,0 +1,19 @@
+---
+
+kernel_packages:
+  - base-devel
+  - bc
+  - gcc
+  - git
+  - graphviz
+  - inetutils
+  - make
+  - libelf
+  - linux-headers
+  - linux-tools
+  - kmod
+  - perl
+  - python
+  - python-sphinx
+  - sudo
+  - xmlto

@@ -1,0 +1,4 @@
+# ---
+
+#- name: 'install grub'
+#  shell: 'arch-chroot /mnt grub-install --debug --recheck --target=x86_64-efi --bootloader-id=GRUB --modules="part_gpt part_msdos mdraid09 mdraid1x" --removable {{ device.dev }}'

@@ -9,7 +9,7 @@
     - docker
     - users
     # - kernel
-    - java
+    # - java
     - pacaur
     - cockpit
-    - kubernetes
+    # - kubernetes

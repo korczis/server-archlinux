@@ -1,39 +1,97 @@
 # ---
 
-# Adhoc helper (testing only)
-- name: 'adhoc commands'
-  include: "./adhoc.yml"
+- name: 'disks configuration'
+  debug: msg="{{ disks }}"
+
+- name: 'arrays configuration'
+  debug: msg="{{ arrays }}"
+
+- name: 'lvm configuration'
+  debug: msg="{{ lvm }}"
+
+- name: 'mounts configuration'
+  debug: msg="{{ mounts }}"
 
 # ---
 
-# Print disk info (debug only)
-- name: 'print disk info'
-  command: "fdisk -l {{ device.dev }}"
-  with_items: "{{ fs_layout.devices }}"
-  loop_control:
-    loop_var: device
+- block:
+  - name: 'cleanup mounts'
+    include: "./mounts-cleanup.yml mounts={{ mounts }}"
+    tags:
+      - clean
+      - mounts
+      - mounts.clean
+
+- block:
+  - name: 'cleanup lvm'
+    include: "./lvm-cleanup.yml lvm={{ lvm }}"
+    tags:
+      - clean
+      - lvm
+      - lvm.clean
+
+- block:
+  - name: 'cleanup md'
+    include: "./md-cleanup.yml arrays={{ arrays }}"
+    tags:
+      - clean
+      - md
+      - md.clean
+    ignore_errors: true
+
+#- block:
+#  - name: 'cleanup md'
+#    include: "./md-cleanup.yml"
+#    with_items: "{{ arrays }}"
+#    loop_control:
+#      loop_var: md
+#    tags:
+#      - md
+#      - md.clean
+
+- block:
+  - name: 'cleanup parts'
+    include: "./parts-cleanup.yml disk={{ disk }}"
+    with_items: "{{ disks }}"
+    loop_control:
+      loop_var: disk
+    tags:
+      - clean
+      - parts
+      - parts.clean
+
+# --
+
+- block:
+  - name: 'init parts'
+    include: "./parts-init.yml"
+    with_items: "{{ disks }}"
+    loop_control:
+      loop_var: disk
+    tags:
+      - init
+      - parts
+      - parts.init
+
+- block:
+  - name: 'init md'
+    include: "./md-init.yml arrays={{ arrays }}"
+    tags:
+      - init
+      - md
+      - md.init
+
+- block:
+  - name: 'init lvm'
+    include: "./lvm-init.yml lvm={{ lvm }}"
+    tags:
+      - init
+      - lvm
+      - lvm.init
+
+- name: 'init mounts'
+  include: "./mounts-init.yml mounts={{ setup_layout.mounts }}"
   tags:
-    - never
-    - debug
-
-# ---
-
-# Install required packages
-- name: 'install prerequisites'
-  include: "./install-prerequisites.yml"
-
-# Load required kernel modules
-- name: 'bootstrap'
-  include: "./bootstrap.yml"
-
-# Initialize filesystem
-- name: 'initialize filesystem'
-  include: "./fs.yml"
-
-# Install system
-- name: 'install system'
-  include: "./install.yml"
-
-# Install bootloader
-- name: 'install bootloader'
-  include: "./bootloader.yml"
+    - init
+    - mounts
+    - mounts.init

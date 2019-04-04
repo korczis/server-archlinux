@@ -1,0 +1,57 @@
+# ---
+
+- name: 'md-cleanup'
+  debug: msg="cleanup {{ arrays }}"
+
+- name: copy /etc/mdadm.conf
+  template:
+    src: etc/mdadm.conf
+    dest: /etc/mdadm.conf
+    owner: root
+    group: root
+    mode: 0644
+
+#- name: 'remove md array'
+#  include_role:
+#    name: ansible-mdadm
+#  vars:
+#    mdadm_arrays:
+#      - name: "{{ md.name }}"
+#        devices: "{{ md.devices }}"
+#        state: 'absent'
+#    args:
+#      removes: "{{ md.dev }}"
+
+# ---
+
+- name: 'remove md arrays'
+  include_role:
+    name: ansible-mdadm
+  vars:
+    mdadm_arrays:
+      - name: 'md3'
+        devices:
+          - "{{ disk1_dev }}3"
+          - "{{ disk2_dev }}3"
+          - "{{ disk3_dev }}3"
+          - "{{ disk4_dev }}3"
+        state: 'absent'
+        # force: true
+
+      - name: 'md2'
+        devices:
+          - "{{ disk1_dev }}2"
+          - "{{ disk2_dev }}2"
+          - "{{ disk3_dev }}2"
+          - "{{ disk4_dev }}2"
+        state: 'absent'
+        # force: true
+
+      - name: 'md1'
+        devices:
+          - "{{ disk1_dev }}1"
+          - "{{ disk2_dev }}1"
+          - "{{ disk3_dev }}1"
+          - "{{ disk4_dev }}1"
+        state: 'absent'
+        # force: true

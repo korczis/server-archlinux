@@ -2,42 +2,52 @@
 
 setup_layout:
   core_host_packages:
-    - ansible
     - git
     - htop
     - mc
-    - mosh
     - tmux
-#    - arch-install-scripts
-#    - dosfstools
-#    - efibootmgr
-#    - efitools
-#    - efivar
-#    - expac
-#    - findutils
-#    - fwupd
-#    - gdisk
-#    - git
-#    - gnupg
-#    - htop
+    - vim
+
+  core_host_packages_old:
+    # - ansible
+    # - arch-install-scripts
+    - archiso
+    # - bonnie++
+    # - dosfstools
+    - efibootmgr
+    - efitools
+    - efivar
+    - expac
+    # - findutils
+    - fwupd
+    # - gdisk
+    - git
+    - gnupg
+    - hdparm
+    - hwinfo
+    - htop
+    # - linux-headers
+    # - linux-tools
+    - mc
+    # - mkinitcpio
+    - mosh
+    - openssh
+    - openssl
+    # - parted
+    # - sbsigntools
+    # - sysfsutils
+    - sudo
+    - tmux
+    # - usbip
+    - vim
+    - yajl
 #    - imagemagick
 #    - jq
 #    - kexec-tools
 #    - linux-tools
-#    - mc
-#    - mkinitcpio
-#    - mosh
-#    - openssh
-#    - openssl
-#    - parted
 #    - refind-efi
-#    - sbsigntools
-#    - sudo
-#    - tmux
 #    - ucode-intel
 #    - udisk2
-#    - vim
-#    - yajl
 
   core_guest_packages:
     - base
@@ -66,7 +76,7 @@ setup_layout:
     - tmux
 
   disks:
-    - device: /dev/sdf
+    - device: '/dev/sde'
       label: 'gpt'
       parts:
         - name: 'EFI'

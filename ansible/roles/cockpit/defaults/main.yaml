@@ -27,4 +27,3 @@ cockpit_packages:
   - python-linux-procfs
   - python-pyudev
   - udisks2
-

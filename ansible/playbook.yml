@@ -5,6 +5,31 @@
   debugger: never
 
   vars:
+    consts:
+      disk1: &disk1
+        dev: &disk1_dev
+          /dev/sda
+        name: &disk1_name
+          sda
+
+      disk2: &disk2
+        dev: &disk2_dev
+          /dev/sdb
+        name: &disk2_name
+          sdb
+
+      disk3: &disk3
+        dev: &disk3_dev
+          /dev/sdc
+        name: &disk3_name
+          sdc
+
+      disk4: &disk4
+        dev: &disk4_dev
+          /dev/sdd
+        name: &disk4_name
+          sdd
+
     mounts: &mounts
       - path: /mnt
         src: /dev/vg.main/root
@@ -23,12 +48,14 @@
         part_end: 1024MiB
         fstype: vfat
         label: gpt
+        opts: '-F32 -n boot-efi'
       - &part_boot
         name: boot
         part_start: 1024MiB
         part_end: 2048MiB
         fstype: ext4
         label: gpt
+        opts: '-L boot'
       - &part_main
         name: main
         flags: [ lvm ]
@@ -36,50 +63,48 @@
         part_end: 100%
         fstype: ext4
         label: gpt
+        opts: '-L root'
 
     disks: &disks
-      - dev: /dev/sda
+      - <<: *disk1
         label: gpt
-        name: sda
         parts: *parts
-      - dev: /dev/sdb
+      - <<: *disk2
         label: gpt
-        name: sdb
         parts: *parts
-      - dev: /dev/sdc
+      - <<: *disk3
         label: gpt
-        name: sdc
         parts: *parts
-      - dev: /dev/sdd
+      - <<: *disk4
         label: gpt
-        name: sdd
         parts: *parts
 
     arrays: &arrays
-      - name: md1
-        dev: /dev/md1
-        mountpoint: /mnt/md1
-        devices:
-          - /dev/sda1
-          - /dev/sdb1
-          - /dev/sdc1
-          - /dev/sdd1
-      - name: md2
-        dev: /dev/md2
-        mountpoint: /mnt/md2
-        devices:
-          - /dev/sda2
-          - /dev/sdb2
-          - /dev/sdc2
-          - /dev/sdd2
-      - name: md3
-        dev: /dev/md3
-        mountpoint: /mnt/md3
-        devices:
-          - /dev/sda3
-          - /dev/sdb3
-          - /dev/sdc3
-          - /dev/sdd3
+      []
+#      - name: md1
+#        dev: /dev/md1
+#        mountpoint: /mnt/md1
+#        devices:
+#          - /dev/sda1
+#          - /dev/sdb1
+#          - /dev/sdc1
+#          - /dev/sdd1
+#      - name: md2
+#        dev: /dev/md2
+#        mountpoint: /mnt/md2
+#        devices:
+#          - /dev/sda2
+#          - /dev/sdb2
+#          - /dev/sdc2
+#          - /dev/sdd2
+#      - name: md3
+#        dev: /dev/md3
+#        mountpoint: /mnt/md3
+#        devices:
+#          - /dev/sda3
+#          - /dev/sdb3
+#          - /dev/sdc3
+#          - /dev/sdd3
 
     lvm: &lvm
       - vg: 'vg.main'
@@ -89,19 +114,50 @@
         fstype: ext4
         resizefs: true
 
+    bootloader: &bootloader
+      grub:
+        - dev: /dev/md1
+        # - dev: /dev/sda1
+        # - dev: /dev/sda2
+        # - dev: /dev/sda3
+        # - dev: /dev/sda4
+      efibootmgr:
+        - dev: /dev/sda1
+        - dev: /dev/sda2
+        - dev: /dev/sda3
+        - dev: /dev/sda4
+
   roles:
     - name: core
       tags:
         - core
     - name: fs
       disks: *disks
+      disk1: *disk1
+      disk1_dev: *disk1_dev
+      disk1_name: *disk1_name
+      disk2: *disk2
+      disk2_dev: *disk2_dev
+      disk2_name: *disk2_name
+      disk3: *disk3
+      disk3_dev: *disk3_dev
+      disk3_name: *disk3_name
+      disk4: *disk4
+      disk4_dev: *disk4_dev
+      disk4_name: *disk4_name
       mounts: *mounts
       arrays: *arrays
       lvm: *lvm
       tags:
+        - fs
         - lvm
+#    - name: mounts
+#      tags:
+#        - mounts
     - name: pacstrap
       tags:
         - pacstrap
-
-
+    - name: bootloader
+      bootloader: *bootloader
+      tags:
+        - bootloader

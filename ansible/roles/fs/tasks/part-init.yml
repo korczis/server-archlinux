@@ -1,0 +1,21 @@
+# ---
+
+- name: 'part-init'
+  debug: msg="init part - {{ disk }} - {{ index }} - {{ part }}"
+
+- name: 'create part'
+  parted:
+    device: "{{ disk.dev }}"
+    number: "{{ index + 1 }}"
+    state: present
+    part_start: "{{ part.part_start }}"
+    part_end: "{{ part.part_end }}"
+    label: "{{ part.label }}"
+    name: "{{ part.name }}-{{ disk.name }}"
+
+- name: 'format partition'
+  filesystem:
+    fstype: "{{ part.fstype }}"
+    dev: "{{ disk.dev }}{{ index + 1 }}"
+    opts: "{{ part.opts }}"
+    force: yes

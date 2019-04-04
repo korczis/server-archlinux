@@ -1,0 +1,16 @@
+# ---
+
+- name: 'copy /etc/pacman.conf'
+  template:
+    src: 'etc/pacman.conf'
+    dest: '/etc/pacman.conf'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: 'pacman-key --init'
+  shell: 'pacman-key --init'
+
+- name: 'pacman-key --populate archlinux'
+  shell: 'pacman-key --populate archlinux'
+

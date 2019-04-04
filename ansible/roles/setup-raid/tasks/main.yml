@@ -25,15 +25,14 @@
 # ---
 
 
-#- name: 'init arrays'
-#  include: "./arrays-init.yml arrays={{ setup_layout.arrays }}"
-#
-#- name: 'init lvm'
-#  include: "./lvm-init.yml"
-#
-#- name: 'mount'
-#  include: "./mounts-init.yml mounts={{ setup_layout.mounts }}"
+- name: 'init arrays'
+  include: "./arrays-init.yml arrays={{ setup_layout.arrays }}"
 
+- name: 'init lvm'
+  include: "./lvm-init.yml"
+
+- name: 'mount'
+  include: "./mounts-init.yml mounts={{ setup_layout.mounts }}"
 
 # ---
 
